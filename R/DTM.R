@@ -7,55 +7,33 @@ require(SnowballC)
 ############################################################################
 # THE BIG WRAPPER FOR SUBCOMPONENTS
 ############################################################################
-DTM<-function(exps, sparse=0.99, wstem="all", 
-              ngrams=1, overlap=1, 
-              vocabmatch=NULL,  TPformat=FALSE,
+DTM<-function(exps, sparse=0.99, wstem="all",
+              ngrams=1, overlap=1,
+              vocabmatch=NULL,
               language="english",
               stopwords=TRUE,
-              verbose=FALSE){ 
+              verbose=FALSE){
 
-  if(TPformat) ngrams=1
-  cleanertext<-unlist(mclapply(exps, cleantext, language, stopwords))
+  cleanertext<-unlist(parallel::mclapply(exps, cleantext, language, stopwords))
   gtm<-list()
   for (ng in 1:length(ngrams)){
-    tokens<-unlist(mclapply(cleanertext, 
+    tokens<-unlist(parallel::mclapply(cleanertext,
                             function(x) gramstem(x, wstem, ngrams[ng], language)))
-    gtm[[ng]] <- DocumentTermMatrix(Corpus(VectorSource(tokens)))
-    if (sparse<1) gtm[[ng]]<-removeSparseTerms(gtm[[ng]], sparse=sparse)
+    gtm[[ng]] <- tm::DocumentTermMatrix(tm::Corpus(tm::VectorSource(tokens)))
+    if (sparse<1) gtm[[ng]]<-tm::removeSparseTerms(gtm[[ng]], sparse=sparse)
     if (ng==1) dtm<-gtm[[1]]
     if ((overlap!=1)&(ng>1)) dtm<-overlaps(dtm, gtm[[ng]], overlap)
-    if ((overlap==1)&(ng>1)) dtm<-cBind(dtm, gtm[[ng]]) 
+    if ((overlap==1)&(ng>1)) dtm<-cBind(dtm, gtm[[ng]])
     if (verbose) print(paste(c(ng, dim(dtm),dim(gtm[[ng]]))))
   }
   #######################################################
-  DSM<-sparseMatrix(i=dtm$i, j=dtm$j, x=dtm$v, 
+  DSM<-Matrix::sparseMatrix(i=dtm$i, j=dtm$j, x=dtm$v,
                     dims=c(dtm$nrow, dtm$ncol),
                     dimnames=list(NULL, colnames(dtm)))
   if (length(ngrams)>1) DSM<-doublestacker(DSM)
   if(!is.null(vocabmatch)) DSM<-DTMmatch(vocabmatch, DSM)
+  return(DSM)
   #######################################################
-  if(!TPformat) return(DSM)
-  if(TPformat){
-    documents<-lapply(1:nrow(DSM), function(x) (rbind(which(DSM[x,]>0), DSM[x,][DSM[x,]>0])))
-    #kept <- 1*(rowMeans(DSM)>0)
-    vocab <- as.character(colnames(DSM))
-    return(list(documents=documents, 
-                vocab=vocab, 
-                meta=NULL, 
-                docs.removed=0))
-  }
-}
-
-DTMtoSTM<-function(mat){
-  dtm<-as.DocumentTermMatrix(mat)
-  documents<-ijv.to.doc(dtm$i, dtm$j, dtm$v)
-  #names(documents) <- dtm$dimnames$Docs
-  kept <- (1:length(documents) %in% unique(dtm$i))
-  vocab <- as.character(dtm$dimnames$Terms)
-  return(list(documents=documents, 
-              vocab=vocab, 
-              meta=NULL, 
-              docs.removed=which(!kept)))
 }
 ############################################################################
 ############################################################################
@@ -64,7 +42,7 @@ DTMtoSTM<-function(mat){
 ############################################################################
 cleantext<-function(ex, language="english", stopwords=TRUE){
   #PUTS ALL LETTERS IN LOWER CASE
-  ex<-tolower(ex)
+  ex<-tm::tolower(ex)
   #EXPANDS CONTRACTIONS
   if(language=="english"){
     ex<-ctxpand(ex)
@@ -73,12 +51,12 @@ cleantext<-function(ex, language="english", stopwords=TRUE){
   ex<-gsub("[[:punct:]]", " ", ex)
   ex<-gsub("[[:cntrl:]]", " ", ex)
   #DELETES STOP WORDS
-  if(stopwords){ 
-    ex<-removeWords(ex, stopwords(language))
+  if(stopwords){
+    ex<-tm::removeWords(ex, tm::stopwords(language))
   }
   #DELETES NUMBERS
-  ex<-removeNumbers(ex)
-  ex<-stripWhitespace(ex)
+  ex<-tm::removeNumbers(ex)
+  ex<-tm::stripWhitespace(ex)
   return(as.character(ex))
 }
 ############################################################################
@@ -97,11 +75,11 @@ ctxpand<-function(CTX2){
   return(CTX2)}
 ############################################################################
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){
-  if(is.na(word_count(text))|word_count(text)<min(ngrams))return(" ") else{
+  if(is.na(qdap::word_count(text,missing=0))|qdap::word_count(text,missing=0)<min(ngrams))return(" ") else{
     xes<-(strsplit(text, split=" ")[[1]])
     xes<-xes[which(nchar(xes)>0)]
     if(length(wstem)>1) xes<-sapply(xes, function(x) stemexcept(x, wstem, language), USE.NAMES=F)
-    if(wstem=="all") xes<-sapply(xes, wordStem, language=language, USE.NAMES=F)
+    if(wstem=="all") xes<-sapply(xes, SnowballC::wordStem, language=language, USE.NAMES=F)
     xret<-" "
     if (1 %in% ngrams) xret<-paste(c(xret, xes), collapse=" ")
     if (2 %in% ngrams) xret<-paste(c(xret, ngrammer(xes, 2)), collapse=" ")
@@ -123,9 +101,9 @@ ngrammer <- function (onewords, ngram){
 }
 ############################################################################
 stemexcept<-function(sentence, excepts, language="english"){
-  words<-strsplit(sentence, split=" ")[[1]] 
+  words<-strsplit(sentence, split=" ")[[1]]
   SS<-which(!(words %in% excepts))
-  words[SS]<-wordStem(words[SS], language)
+  words[SS]<-SnowballC::wordStem(words[SS], language)
   return(paste(words, collapse=" "))
 }
 ############################################################################
@@ -136,7 +114,7 @@ overlaps<-function(high, low, cutoff=.8){
   #high[,CN]<-high[,-CN]
   #}
   #}
-  peaks<-apply(high, 2, function(x) max(apply(low, 2, 
+  peaks<-apply(high, 2, function(x) max(apply(low, 2,
                                               function(y) cosdist(x, y))))
   remaining<-high[,peaks<=cutoff]
   return(cBind(remaining,low))
