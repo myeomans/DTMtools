@@ -23,7 +23,7 @@ DTM<-function(exps, sparse=0.99, wstem="all",
     if (sparse<1) gtm[[ng]]<-tm::removeSparseTerms(gtm[[ng]], sparse=sparse)
     if (ng==1) dtm<-gtm[[1]]
     if ((overlap!=1)&(ng>1)) dtm<-overlaps(dtm, gtm[[ng]], overlap)
-    if ((overlap==1)&(ng>1)) dtm<-cBind(dtm, gtm[[ng]])
+    if ((overlap==1)&(ng>1)) dtm<-Matrix::cBind(dtm, gtm[[ng]])
     if (verbose) print(paste(c(ng, dim(dtm),dim(gtm[[ng]]))))
   }
   #######################################################
@@ -117,7 +117,7 @@ overlaps<-function(high, low, cutoff=.8){
   peaks<-apply(high, 2, function(x) max(apply(low, 2,
                                               function(y) cosdist(x, y))))
   remaining<-high[,peaks<=cutoff]
-  return(cBind(remaining,low))
+  return(Matrix::cBind(remaining,low))
 }
 ############################################################################
 doublestacker<-function (WDCTX){
