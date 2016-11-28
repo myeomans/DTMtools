@@ -1,9 +1,9 @@
-
-require(parallel)
-require(tm)
-require(qdap)
-require(Matrix)
-require(SnowballC)
+#
+# require(parallel)
+# require(tm)
+# require(qdap)
+# require(Matrix)
+# require(SnowballC)
 ############################################################################
 # THE BIG WRAPPER FOR SUBCOMPONENTS
 ############################################################################
@@ -14,7 +14,7 @@ DTM<-function(exps, sparse=0.99, wstem="all",
               stopwords=TRUE,
               verbose=FALSE){
 # dt<-read.csv("/DATA/TQS.csv",stringsAsFactors = F)
-# exps=dt$text
+# exps=dt$ques
 # sparse=0.99
 # language="english"
 # ngrams=1:3
@@ -22,11 +22,10 @@ DTM<-function(exps, sparse=0.99, wstem="all",
 # overlap=1
 # stopwords=TRUE
 # verbose=FALSE
-  cleanertext<-unlist(parallel::mclapply(exps, cleantext, language, stopwords))
+  cleanertext<-unlist(sapply(exps, cleantext, language, stopwords))
   gtm<-list()
   for (ng in 1:length(ngrams)){
-    tokens<-unlist(parallel::mclapply(cleanertext,
-                            function(x) gramstem(x, wstem, ngrams[ng], language)))
+    tokens<-unlist(sapply(cleanertext, function(x) gramstem(x, wstem, ngrams[ng], language)))
     gtm[[ng]] <- tm::DocumentTermMatrix(tm::Corpus(tm::VectorSource(tokens)))
     if (sparse<1) gtm[[ng]]<-tm::removeSparseTerms(gtm[[ng]], sparse=sparse)
     if (ng==1) dtm<-gtm[[1]]
