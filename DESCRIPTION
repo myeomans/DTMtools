@@ -1,0 +1,17 @@
+Package: DTMtools
+Type: Package
+Version: 0.0.1
+Title: Text-to-Features for Social Science.
+Description: Text-to-Features for Social Science. In progress.
+Authors@R: c(
+    person("Michael", "Yeomans", , "mk.yeomans@gmail.com", c("aut", "cre")))
+URL: https://github.com/myeomans/DTMtools
+BugReports: https://github.com/myeomans/DTMtools/issues
+Depends: 
+    R (>= 3.1.0)
+Imports: 
+    parallel,
+    tm,
+    qdap,
+    Matrix,
+    SnowballC
