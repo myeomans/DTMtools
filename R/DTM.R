@@ -42,7 +42,7 @@ DTM<-function(exps, sparse=0.99, wstem="all",
 ############################################################################
 cleantext<-function(ex, language="english", stopwords=TRUE){
   #PUTS ALL LETTERS IN LOWER CASE
-  ex<-tm::tolower(ex)
+  ex<-tmtolower(ex)
   #EXPANDS CONTRACTIONS
   if(language=="english"){
     ex<-ctxpand(ex)
