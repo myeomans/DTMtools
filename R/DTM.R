@@ -13,7 +13,15 @@ DTM<-function(exps, sparse=0.99, wstem="all",
               language="english",
               stopwords=TRUE,
               verbose=FALSE){
-
+# dt<-read.csv("/DATA/TQS.csv",stringsAsFactors = F)
+# exps=dt$text
+# sparse=0.99
+# language="english"
+# ngrams=1:3
+# wstem="all"
+# overlap=1
+# stopwords=TRUE
+# verbose=FALSE
   cleanertext<-unlist(parallel::mclapply(exps, cleantext, language, stopwords))
   gtm<-list()
   for (ng in 1:length(ngrams)){
@@ -42,7 +50,7 @@ DTM<-function(exps, sparse=0.99, wstem="all",
 ############################################################################
 cleantext<-function(ex, language="english", stopwords=TRUE){
   #PUTS ALL LETTERS IN LOWER CASE
-  ex<-tmtolower(ex)
+  ex<-tolower(ex)
   #EXPANDS CONTRACTIONS
   if(language=="english"){
     ex<-ctxpand(ex)
