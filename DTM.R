@@ -1,4 +1,9 @@
-#load("data/congress_obamacare.RData")
+
+require(parallel)
+require(tm)
+require(qdap)
+require(Matrix)
+require(SnowballC)
 ############################################################################
 # THE BIG WRAPPER FOR SUBCOMPONENTS
 ############################################################################
@@ -8,20 +13,7 @@ DTM<-function(exps, sparse=0.99, wstem="all",
               language="english",
               stopwords=TRUE,
               verbose=FALSE){ 
-  require(parallel)
-  require(tm)
-  require(qdap)
-  require(Matrix)
-  require(SnowballC)
-  #    exps=CONGEX$text
-  #    sparse=0.99
-  #    language="english"
-  #   ngrams=1
-  #   wstem="all"
-  # TPformat=FALSE
-  #   overlap=0.5
-  #   stopwords=TRUE
-  #   verbose=FALSE
+
   if(TPformat) ngrams=1
   cleanertext<-unlist(mclapply(exps, cleantext, language, stopwords))
   gtm<-list()
