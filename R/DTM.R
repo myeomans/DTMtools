@@ -146,3 +146,38 @@ DTMmatch<-function(hole, peg){
   dimnames(newpeg)<-list(rownames(peg), colnames(hole))
   return(as.matrix(newpeg))
 }
+
+
+############################################################################
+# Recover Stemming
+############################################################################
+stemlist<-function(vocab, texts, wstem="all",
+                   ngrams=1,language="english", stopwords=TRUE){
+  vocab=colnames(TEXT)
+  texts<-SLIM$cleantext3[1:200]
+  ngrams<-1:3
+  language="spanish"
+  stopwords=TRUE
+  wstem="all"
+
+  if(mean(ngrams==1)!=1){
+    cleanertext<-unlist(sapply(texts, cleantext, language, stopwords))
+    xfull<-unlist(sapply(cleanertext, gramstem, "none",ngrams, "spanish"))
+  }else{
+    xfull<-unlist(sapply(texts, cleantext, language, stopwords))
+  }
+  xes<-c("")
+  for (ct in xfull){
+    xes<-c(xes,strsplit(ct, split=" ")[[1]])
+  }
+  xes<-xes[xes!=""]
+  xes<-unlist(sapply(xes, gsub, pattern=".",replacement=" ",fixed=TRUE))
+  excepts<-ifelse(wstem=="all", "", wstem)
+  xstem<-sapply(xes, function(x) stemexcept(x, excepts, language), USE.NAMES=F)
+  xstem<-unlist(sapply(xstem, gsub, pattern=" ",replacement=".",fixed=TRUE))
+  vcounts<-list()
+  for (v in vocab){
+    vcounts[[v]]<-table(xes[xstem==v])
+  }
+  return(vcounts)
+}
