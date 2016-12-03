@@ -147,18 +147,17 @@ DTMmatch<-function(hole, peg){
   return(as.matrix(newpeg))
 }
 
-
 ############################################################################
 # Recover Stemming
 ############################################################################
 stemlist<-function(vocab, texts, wstem="all",
                    ngrams=1,language="english", stopwords=TRUE){
-  vocab=colnames(TEXT)
-  texts<-SLIM$cleantext3[1:200]
-  ngrams<-1:3
-  language="spanish"
-  stopwords=TRUE
-  wstem="all"
+  # vocab=colnames(TEXT)
+  # texts<-SLIM$cleantext3[1:200]
+  # ngrams<-1:3
+  # language="spanish"
+  # stopwords=TRUE
+  # wstem="all"
 
   if(mean(ngrams==1)!=1){
     cleanertext<-unlist(sapply(texts, cleantext, language, stopwords))
