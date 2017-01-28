@@ -10,9 +10,9 @@ DTM<-function(exps, sparse=0.99, wstem="all",
               vocabmatch=NULL,
               language="english",
               TPformat=FALSE,
-              stopwords=TRUE,
+              stop.words=TRUE,
               verbose=FALSE){
-  cleanertext<-unlist(sapply(exps, cleantext, language, stopwords))
+  cleanertext<-unlist(sapply(exps, cleantext, language, stop.words))
   gtm<-list()
   for (ng in 1:length(ngrams)){
     tokens<-unlist(sapply(cleanertext, function(x) gramstem(x, wstem, ngrams[ng], language)))

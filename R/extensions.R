@@ -29,19 +29,19 @@ DTMmatch<-function(hole, peg){
 # Recover Stemming
 ############################################################################
 stemlist<-function(vocab, texts, wstem="all",
-                   ngrams=1,language="english", stopwords=TRUE){
+                   ngrams=1,language="english", stop.words=TRUE){
   # vocab=colnames(TEXT)
   # texts<-SLIM$cleantext3[1:200]
   # ngrams<-1:3
   # language="spanish"
-  # stopwords=TRUE
+  # stop.words=TRUE
   # wstem="all"
 
   if(mean(ngrams==1)!=1){
-    cleanertext<-unlist(sapply(texts, cleantext, language, stopwords))
+    cleanertext<-unlist(sapply(texts, cleantext, language, stop.words))
     xfull<-unlist(sapply(cleanertext, gramstem, "none",ngrams, "spanish"))
   }else{
-    xfull<-unlist(sapply(texts, cleantext, language, stopwords))
+    xfull<-unlist(sapply(texts, cleantext, language, stop.words))
   }
   xes<-c("")
   for (ct in xfull){

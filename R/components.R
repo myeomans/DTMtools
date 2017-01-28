@@ -1,7 +1,7 @@
 ############################################################################
 # Underlying functions for DTM
 ############################################################################
-cleantext<-function(ex, language="english", stopwords=TRUE){
+cleantext<-function(ex, language="english", stop.words=TRUE){
   #PUTS ALL LETTERS IN LOWER CASE
   ex<-tolower(ex)
   #EXPANDS CONTRACTIONS
@@ -12,9 +12,9 @@ cleantext<-function(ex, language="english", stopwords=TRUE){
   ex<-gsub("[[:punct:]]", " ", ex)
   ex<-gsub("[[:cntrl:]]", " ", ex)
   #DELETES STOP WORDS
-  if(length(stopwords)>1){
-    ex<-tm::removeWords(ex, stopwords)
-  }else if(stopwords){
+  if(length(stop.words)>1){
+    ex<-tm::removeWords(ex, stop.words)
+  }else if(stop.words){
     ex<-tm::removeWords(ex, tm::stopwords(language))
   }
   #DELETES NUMBERS
