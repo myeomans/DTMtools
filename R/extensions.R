@@ -1,3 +1,14 @@
+############################################################################
+# Count word lists
+############################################################################
+textcounter<-function (counted, texts, fixed=T) {
+  counts<-rep(0,length(texts))
+  for (x in counted){
+    counts<-counts+sapply(gregexpr(x, texts, fixed = fixed), function(z) ifelse(z[1] == (-1), 0, length(z)))
+  }
+  return(counts)
+}
+############################################################################
 
 ############################################################################
 # FIT OUT-OF-SAMPLE TEXT TO TRAINING FEATURES
@@ -46,19 +57,5 @@ stemlist<-function(vocab, texts, wstem="all",
     vcounts[[v]]<-table(xes[xstem==v])
   }
   return(vcounts)
-}
-############################################################################
-# Convert to STM format (Roberts et al., 2014)
-############################################################################
-DTMtoSTM<-function(mat){
-  dtm<-as.DocumentTermMatrix(mat)
-  documents<-ijv.to.doc(dtm$i, dtm$j, dtm$v)
-  #names(documents) <- dtm$dimnames$Docs
-  kept <- (1:length(documents) %in% unique(dtm$i))
-  vocab <- as.character(dtm$dimnames$Terms)
-  return(list(documents=documents,
-              vocab=vocab,
-              meta=NULL,
-              docs.removed=which(!kept)))
 }
 ############################################################################
