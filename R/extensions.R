@@ -1,0 +1,64 @@
+
+############################################################################
+# FIT OUT-OF-SAMPLE TEXT TO TRAINING FEATURES
+############################################################################
+DTMmatch<-function(hole, peg){
+  #peg<-doublestacker(peg)
+  newpeg<-array(0, c(nrow(peg), ncol(hole)))
+  for (i in 1:ncol(newpeg)){
+    if(colnames(hole)[i] %in% colnames(peg)){
+      newpeg[,i]<-peg[,which(colnames(peg)==colnames(hole)[i])]
+    }
+  }
+  dimnames(newpeg)<-list(rownames(peg), colnames(hole))
+  return(as.matrix(newpeg))
+}
+
+############################################################################
+# Recover Stemming
+############################################################################
+stemlist<-function(vocab, texts, wstem="all",
+                   ngrams=1,language="english", stopwords=TRUE){
+  # vocab=colnames(TEXT)
+  # texts<-SLIM$cleantext3[1:200]
+  # ngrams<-1:3
+  # language="spanish"
+  # stopwords=TRUE
+  # wstem="all"
+
+  if(mean(ngrams==1)!=1){
+    cleanertext<-unlist(sapply(texts, cleantext, language, stopwords))
+    xfull<-unlist(sapply(cleanertext, gramstem, "none",ngrams, "spanish"))
+  }else{
+    xfull<-unlist(sapply(texts, cleantext, language, stopwords))
+  }
+  xes<-c("")
+  for (ct in xfull){
+    xes<-c(xes,strsplit(ct, split=" ")[[1]])
+  }
+  xes<-xes[xes!=""]
+  xes<-unlist(sapply(xes, gsub, pattern=".",replacement=" ",fixed=TRUE))
+  excepts<-ifelse(wstem=="all", "", wstem)
+  xstem<-sapply(xes, function(x) stemexcept(x, excepts, language), USE.NAMES=F)
+  xstem<-unlist(sapply(xstem, gsub, pattern=" ",replacement=".",fixed=TRUE))
+  vcounts<-list()
+  for (v in vocab){
+    vcounts[[v]]<-table(xes[xstem==v])
+  }
+  return(vcounts)
+}
+############################################################################
+# Convert to STM format (Roberts et al., 2014)
+############################################################################
+DTMtoSTM<-function(mat){
+  dtm<-as.DocumentTermMatrix(mat)
+  documents<-ijv.to.doc(dtm$i, dtm$j, dtm$v)
+  #names(documents) <- dtm$dimnames$Docs
+  kept <- (1:length(documents) %in% unique(dtm$i))
+  vocab <- as.character(dtm$dimnames$Terms)
+  return(list(documents=documents,
+              vocab=vocab,
+              meta=NULL,
+              docs.removed=which(!kept)))
+}
+############################################################################
