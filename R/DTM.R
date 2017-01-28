@@ -11,6 +11,7 @@ DTM<-function(exps, sparse=0.99, wstem="all",
               ngrams=1, overlap=1,
               vocabmatch=NULL,
               language="english",
+              TPformat=FALSE,
               stopwords=TRUE,
               verbose=FALSE){
   cleanertext<-unlist(sapply(exps, cleantext, language, stopwords))
@@ -30,8 +31,17 @@ DTM<-function(exps, sparse=0.99, wstem="all",
                     dimnames=list(NULL, colnames(dtm)))
   if (length(ngrams)>1) DSM<-doublestacker(DSM)
   if(!is.null(vocabmatch)) DSM<-DTMmatch(vocabmatch, DSM)
-  return(DSM)
   #######################################################
+  if(!TPformat) return(DSM)
+  if(TPformat){
+    documents<-lapply(1:nrow(DSM), function(x) (rbind(which(DSM[x,]>0), DSM[x,][DSM[x,]>0])))
+    #kept <- 1*(rowMeans(DSM)>0)
+    vocab <- as.character(colnames(DSM))
+    return(list(documents=documents,
+                vocab=vocab,
+                meta=NULL,
+                docs.removed=0))
+  }
 }
 ############################################################################
 ############################################################################
@@ -182,3 +192,18 @@ stemlist<-function(vocab, texts, wstem="all",
   }
   return(vcounts)
 }
+############################################################################
+# Convert to STM format (Roberts et al., 2014)
+############################################################################
+DTMtoSTM<-function(mat){
+  dtm<-as.DocumentTermMatrix(mat)
+  documents<-ijv.to.doc(dtm$i, dtm$j, dtm$v)
+  #names(documents) <- dtm$dimnames$Docs
+  kept <- (1:length(documents) %in% unique(dtm$i))
+  vocab <- as.character(dtm$dimnames$Terms)
+  return(list(documents=documents,
+              vocab=vocab,
+              meta=NULL,
+              docs.removed=which(!kept)))
+}
+############################################################################
