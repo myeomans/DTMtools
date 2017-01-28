@@ -97,3 +97,18 @@ doublestacker<-function (WDCTX){
   return(WDCTX[, !is.na(colMeans(WDCTX))])
 }
 ############################################################################
+
+# filters out group-specific words
+# based on concentration (i.e. % of occurrences that fall in most common group)
+group.max.conc<-function(texts,groups, cutoff=0.8){
+  group.id<-unique(groups)
+  cts<-array(NA, c(ncol(texts),length(group.id)))
+  for(g in 1:length(group.id)){
+    cts[,g]<-colSums(texts[groups==group.id[g],])
+  }
+  max.conc<-apply(cts,1,max)/rowSums(cts)
+  return(texts[,max.conc<cutoff])
+  #return(list(conc=max.conc,
+  #            cts=cts))
+}
+############################################################################

@@ -1,15 +1,14 @@
 ############################################################################
 # Convert to STM format (Roberts et al., 2014)
 ############################################################################
-DTMtoSTM<-function(mat){
-  dtm<-as.DocumentTermMatrix(mat)
-  documents<-ijv.to.doc(dtm$i, dtm$j, dtm$v)
-  #names(documents) <- dtm$dimnames$Docs
+DTMtoSTM<-function(mat, meta=NULL){
+  dtm<-slam::as.simple_triplet_matrix(mat)
+  documents<-stm:::ijv.to.doc(dtm$i, dtm$j, dtm$v)
   kept <- (1:length(documents) %in% unique(dtm$i))
-  vocab <- as.character(dtm$dimnames$Terms)
+  vocab <- as.character(colnames(dtm))
   return(list(documents=documents,
               vocab=vocab,
-              meta=NULL,
+              meta=meta[kept,],
               docs.removed=which(!kept)))
 }
 ############################################################################
