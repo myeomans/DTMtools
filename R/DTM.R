@@ -49,7 +49,9 @@ cleantext<-function(ex, language="english", stopwords=TRUE){
   ex<-gsub("[[:punct:]]", " ", ex)
   ex<-gsub("[[:cntrl:]]", " ", ex)
   #DELETES STOP WORDS
-  if(stopwords){
+  if(length(stopwords)>1){
+    ex<-tm::removeWords(ex, stopwords)
+  }else if(stopwords){
     ex<-tm::removeWords(ex, tm::stopwords(language))
   }
   #DELETES NUMBERS
