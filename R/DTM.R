@@ -11,7 +11,7 @@ DTM<-function(texts, sparse=0.99, wstem="all",
               language="english",
               TPformat=FALSE,
               stop.words=TRUE,
-              group.conc=NULL,
+              group.conc=NA,
               group.conc.cutoff=0.8,
               verbose=FALSE){
   cleanertext<-unlist(sapply(texts, cleantext, language, stop.words))
