@@ -34,9 +34,9 @@ DTM<-function(texts, sparse=0.99, wstem="all",
   if (length(ngrams)>1) DSM<-doublestacker(DSM)
   if(!is.null(vocabmatch)) DSM<-DTMmatch(vocabmatch, DSM)
   #######################################################
-  if(length(group.conc)==nrow(DSM)){
-    DSM<-group.max.conc(DSM, group.conc, cutoff=group.conc.cutoff)
-  }
+  # if(length(group.conc)==nrow(DSM)){
+  #   DSM<-group.max.conc(DSM, group.conc, cutoff=group.conc.cutoff)
+  # }
   #######################################################
   if(!TPformat) return(DSM)
   if(TPformat){
