@@ -20,7 +20,7 @@ DTM<-function(texts, sparse=0.99, wstem="all",
   for (ng in 1:length(ngrams)){
     tokens<-unlist(sapply(cleanertext, function(x) gramstem(x, wstem, ngrams[ng], language)))
     gtm[[ng]] <- as.matrix(quanteda::dfm(tokens))
-    if (ng==1) dtm<-gtm[[1]]
+    if (ng==1) dtm<-gtm[[1]][,colSums(gtm[[1]])>1]
     if (ng>1){
       if (overlap!=1) dtm<-overlaps(dtm, gtm[[ng]], overlap)
       if (overlap==1) dtm<-Matrix::cBind(dtm, as.matrix(gtm[[ng]]))
