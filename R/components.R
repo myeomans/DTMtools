@@ -24,6 +24,9 @@ cleantext<-function(ex, language="english", stop.words=TRUE){
 }
 ############################################################################
 ctxpand<-function(CTX2){
+  CTX2<-sapply(CTX2, function(x) gsub("”", "\"", x))
+  CTX2<-sapply(CTX2, function(x) gsub("“", "\"", x))
+  CTX2<-sapply(CTX2, function(x) gsub("’", "\'", x))
   CTX2<-sapply(CTX2, function(x) gsub("let's", "let us", x))
   CTX2<-sapply(CTX2, function(x) gsub("i'm", "i am", x))
   CTX2<-sapply(CTX2, function(x) gsub("won't", "will not", x))
