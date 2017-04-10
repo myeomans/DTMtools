@@ -58,11 +58,11 @@ ngrammer <- function (onewords, ngram){
   }else{
     if (ngram==2){
       twowords<-cbind(onewords[1:(len-1)], onewords[2:len])
-      return(apply(twowords, 1, function(x) paste0(x, collapse=".")))
+      return(apply(twowords, 1, function(x) paste0(x, collapse="_")))
     }
     if (ngram==3){
       threewords<-cbind(onewords[1:(len-2)], onewords[2:(len-1)], onewords[3:len])
-      return(apply(threewords, 1, function(x) paste0(x, collapse=".")))
+      return(apply(threewords, 1, function(x) paste0(x, collapse="_")))
     }
   }
 }
@@ -81,8 +81,7 @@ overlaps<-function(high, low, cutoff=.8){
   #high[,CN]<-high[,-CN]
   #}
   #}
-  peaks<-apply(high, 2, function(x) max(apply(low, 2,
-                                              function(y) cosdist(x, y))))
+  peaks<-apply(high, 2, function(x) max(apply(low, 2, function(y) cosdist(x, y))))
   remaining<-high[,peaks<=cutoff]
   return(Matrix::cBind(remaining,low))
 }

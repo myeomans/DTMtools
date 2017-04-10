@@ -1,7 +1,7 @@
-# require(tm)
-# require(qdap)
-# require(Matrix)
-# require(SnowballC)
+require(tm)
+require(qdap)
+require(Matrix)
+require(SnowballC)
 ############################################################################
 # THE BIG WRAPPER FUNCTION
 ############################################################################
@@ -14,26 +14,24 @@ DTM<-function(texts, sparse=0.99, wstem="all",
               group.conc=NA,
               group.conc.cutoff=0.8,
               verbose=FALSE){
+
   cleanertext<-unlist(sapply(texts, cleantext, language, stop.words))
   gtm<-list()
   for (ng in 1:length(ngrams)){
     tokens<-unlist(sapply(cleanertext, function(x) gramstem(x, wstem, ngrams[ng], language)))
-    gtm[[ng]] <- tm::DocumentTermMatrix(tm::Corpus(tm::VectorSource(tokens)))
-
-    # sparseness should come later, right??
-    if (sparse<1) gtm[[ng]]<-tm::removeSparseTerms(gtm[[ng]], sparse=sparse)
+    gtm[[ng]] <- as.matrix(quanteda::dfm(tokens))
     if (ng==1) dtm<-gtm[[1]]
-    if ((overlap!=1)&(ng>1)) dtm<-overlaps(dtm, gtm[[ng]], overlap)
-    if ((overlap==1)&(ng>1)) dtm<-Matrix::cBind(dtm, gtm[[ng]])
+    if (ng>1){
+      if (overlap!=1) dtm<-overlaps(dtm, gtm[[ng]], overlap)
+      if (overlap==1) dtm<-Matrix::cBind(dtm, as.matrix(gtm[[ng]]))
+      dtm<-doublestacker(dtm)
+    }
     if (verbose) print(paste(c(ng, dim(dtm),dim(gtm[[ng]]))))
   }
   #######################################################
-  DSM<-Matrix::sparseMatrix(i=dtm$i, j=dtm$j, x=dtm$v,
-                            dims=c(dtm$nrow, dtm$ncol),
-                            dimnames=list(NULL, colnames(dtm)))
-  if (length(ngrams)>1) DSM<-doublestacker(DSM)
+  if (sparse<1) dtm<-dtm[,colMeans(dtm>0)>=(1-sparse)]
+  DSM<-Matrix::Matrix(dtm, sparse=T)
   if(!is.null(vocabmatch)) DSM<-DTMmatch(vocabmatch, DSM)
-  #######################################################
   # if(length(group.conc)==nrow(DSM)){
   #   DSM<-group.max.conc(DSM, group.conc, cutoff=group.conc.cutoff)
   # }
