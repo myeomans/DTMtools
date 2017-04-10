@@ -27,6 +27,9 @@ cleantext<-function(ex, language="english", stop.words=TRUE, punct=F){
 textformat<-function(text, punct=F){
 text<-sapply(text, function(x) gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", x))
 text<-sapply(text, function(x) gsub("www.(.*)[.][a-z]+", "", x))
+text<-sapply(text, function(x) gsub("”", "\"", x))
+text<-sapply(text, function(x) gsub("“", "\"", x))
+text<-sapply(text, function(x) gsub("’", "\'", x))
 text<-gsub("ha ha"," haha ",text,fixed=T)
 text<-gsub("lol"," haha ",text,fixed=T)
 text<-gsub("LOL"," haha ",text,fixed=T)
@@ -40,11 +43,10 @@ for (x in 1:5){
   text<-gsub("??","?",text,fixed=T)
   text<-gsub("!!","!",text,fixed=T)
 }
-text<-gsub("!"," xmark.",text,fixed=T)
-text<-gsub("?"," qmark.",text,fixed=T)
-text<-sapply(text, function(x) gsub("”", "\"", x))
-text<-sapply(text, function(x) gsub("“", "\"", x))
-text<-sapply(text, function(x) gsub("’", "\'", x))
+if(punct){
+  text<-gsub("!"," xmark.",text,fixed=T)
+  text<-gsub("?"," qmark.",text,fixed=T)
+}
 }
 ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("let's", "let us", x))
