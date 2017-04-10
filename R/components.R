@@ -1,10 +1,10 @@
 ############################################################################
 # Underlying functions for DTM
 ############################################################################
-cleantext<-function(ex, language="english", stop.words=TRUE){
+cleantext<-function(ex, language="english", stop.words=TRUE, punct=F){
   #PUTS ALL LETTERS IN LOWER CASE
   ex<-tolower(ex)
-  ex<-textformat(ex)
+  ex<-textformat(ex, punct)
   #EXPANDS CONTRACTIONS
   if(language=="english"){
     ex<-ctxpand(ex)
@@ -24,7 +24,7 @@ cleantext<-function(ex, language="english", stop.words=TRUE){
   return(as.character(ex))
 }
 ############################################################################
-textformat<-function(text){
+textformat<-function(text, punct=F){
 text<-sapply(text, function(x) gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", x))
 text<-sapply(text, function(x) gsub("www.(.*)[.][a-z]+", "", x))
 text<-gsub("ha ha"," haha ",text,fixed=T)
