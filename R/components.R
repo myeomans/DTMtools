@@ -35,6 +35,9 @@ ctxpand<-function(CTX2){
   CTX2<-sapply(CTX2, function(x) gsub("'ll", " will", x))
   CTX2<-sapply(CTX2, function(x) gsub("'re", " are", x))
   CTX2<-sapply(CTX2, function(x) gsub("n't", " not", x))
+  CTX2<-sapply(CTX2, function(x) gsub("u.s.", "us", x))
+  CTX2<-sapply(CTX2, function(x) gsub("e.g.", "eg", x))
+  CTX2<-sapply(CTX2, function(x) gsub("i.e.", "ie", x))
   return(CTX2)}
 ############################################################################
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){
