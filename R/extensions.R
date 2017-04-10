@@ -39,7 +39,7 @@ stemlist<-function(vocab, texts, wstem="all",
 
   if(mean(ngrams==1)!=1){
     cleanertext<-unlist(sapply(texts, cleantext, language, stop.words))
-    xfull<-unlist(sapply(cleanertext, gramstem, "none",ngrams, "spanish"))
+    xfull<-unlist(sapply(cleanertext, gramstem, "none",ngrams, language))
   }else{
     xfull<-unlist(sapply(texts, cleantext, language, stop.words))
   }
