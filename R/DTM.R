@@ -24,11 +24,11 @@ DTM<-function(texts, sparse=0.99, wstem="all",
     if (ng>1){
       if (overlap!=1) dtm<-overlaps(dtm, gtm[[ng]], overlap)
       if (overlap==1) dtm<-Matrix::cBind(dtm, as.matrix(gtm[[ng]]))
-      dtm<-doublestacker(dtm)
     }
     if (verbose) print(paste(c(ng, dim(dtm),dim(gtm[[ng]]))))
   }
   #######################################################
+  dtm<-doublestacker(dtm)
   if (sparse<1) dtm<-dtm[,colMeans(dtm>0)>=(1-sparse)]
   DSM<-Matrix::Matrix(dtm, sparse=T)
   if(!is.null(vocabmatch)) DSM<-DTMmatch(vocabmatch, DSM)
