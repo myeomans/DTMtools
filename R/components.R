@@ -4,6 +4,7 @@
 cleantext<-function(ex, language="english", stop.words=TRUE){
   #PUTS ALL LETTERS IN LOWER CASE
   ex<-tolower(ex)
+  ex<-textformat(ex)
   #EXPANDS CONTRACTIONS
   if(language=="english"){
     ex<-ctxpand(ex)
@@ -23,43 +24,44 @@ cleantext<-function(ex, language="english", stop.words=TRUE){
   return(as.character(ex))
 }
 ############################################################################
-ctxpand<-function(CTX2){
-  CTX2<-sapply(CTX2, function(x) gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", x))
-  CTX2<-gsub("ha ha"," haha ",CTX2,fixed=T)
-  CTX2<-gsub("lol"," haha ",CTX2,fixed=T)
-  CTX2<-gsub("LOL"," haha ",CTX2,fixed=T)
-  CTX2<-gsub("LOl"," haha ",CTX2,fixed=T)
-  CTX2<-gsub("Lol"," haha ",CTX2,fixed=T)
-  for (x in 1:5){
-    CTX2<-gsub(".?","?",CTX2,fixed=T)
-    CTX2<-gsub("?.","?",CTX2,fixed=T)
-    CTX2<-gsub("!?","?",CTX2,fixed=T)
-    CTX2<-gsub("?!","?",CTX2,fixed=T)
-    CTX2<-gsub("??","?",CTX2,fixed=T)
-    CTX2<-gsub("!!","!",CTX2,fixed=T)
-  }
-  CTX2<-gsub("!"," xmark.",CTX2,fixed=T)
-  CTX2<-gsub("?"," qmark.",CTX2,fixed=T)
-  ################################################################
-  CTX2<-sapply(CTX2, function(x) gsub("”", "\"", x))
-  CTX2<-sapply(CTX2, function(x) gsub("“", "\"", x))
-  CTX2<-sapply(CTX2, function(x) gsub("’", "\'", x))
-  ################################################################
-  CTX2<-sapply(CTX2, function(x) gsub("let's", "let us", x))
-  CTX2<-sapply(CTX2, function(x) gsub("i'm", "i am", x))
-  CTX2<-sapply(CTX2, function(x) gsub("won't", "will not", x))
-  CTX2<-sapply(CTX2, function(x) gsub("can't", "cannot", x))
-  CTX2<-sapply(CTX2, function(x) gsub("shan't", "shall not", x))
-  CTX2<-sapply(CTX2, function(x) gsub("'d", " would", x))
-  CTX2<-sapply(CTX2, function(x) gsub("'ve", " have", x))
-  CTX2<-sapply(CTX2, function(x) gsub("'s", " is", x))
-  CTX2<-sapply(CTX2, function(x) gsub("'ll", " will", x))
-  CTX2<-sapply(CTX2, function(x) gsub("'re", " are", x))
-  CTX2<-sapply(CTX2, function(x) gsub("n't", " not", x))
-  CTX2<-sapply(CTX2, function(x) gsub("u.s.", "us", x))
-  CTX2<-sapply(CTX2, function(x) gsub("e.g.", "eg", x))
-  CTX2<-sapply(CTX2, function(x) gsub("i.e.", "ie", x))
-  return(CTX2)}
+textformat<-function(text){
+text<-sapply(text, function(x) gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", x))
+text<-sapply(text, function(x) gsub("www.(.*)[.][a-z]+", "", x))
+text<-gsub("ha ha"," haha ",text,fixed=T)
+text<-gsub("lol"," haha ",text,fixed=T)
+text<-gsub("LOL"," haha ",text,fixed=T)
+text<-gsub("LOl"," haha ",text,fixed=T)
+text<-gsub("Lol"," haha ",text,fixed=T)
+for (x in 1:5){
+  text<-gsub(".?","?",text,fixed=T)
+  text<-gsub("?.","?",text,fixed=T)
+  text<-gsub("!?","?",text,fixed=T)
+  text<-gsub("?!","?",text,fixed=T)
+  text<-gsub("??","?",text,fixed=T)
+  text<-gsub("!!","!",text,fixed=T)
+}
+text<-gsub("!"," xmark.",text,fixed=T)
+text<-gsub("?"," qmark.",text,fixed=T)
+CTX<-sapply(CTX, function(x) gsub("”", "\"", x))
+CTX<-sapply(CTX, function(x) gsub("“", "\"", x))
+CTX<-sapply(CTX, function(x) gsub("’", "\'", x))
+}
+ctxpand<-function(text){
+  text<-sapply(text, function(x) gsub("let's", "let us", x))
+  text<-sapply(text, function(x) gsub("i'm", "i am", x))
+  text<-sapply(text, function(x) gsub("won't", "will not", x))
+  text<-sapply(text, function(x) gsub("can't", "cannot", x))
+  text<-sapply(text, function(x) gsub("shan't", "shall not", x))
+  text<-sapply(text, function(x) gsub("'d", " would", x))
+  text<-sapply(text, function(x) gsub("'ve", " have", x))
+  text<-sapply(text, function(x) gsub("'s", " is", x))
+  text<-sapply(text, function(x) gsub("'ll", " will", x))
+  text<-sapply(text, function(x) gsub("'re", " are", x))
+  text<-sapply(text, function(x) gsub("n't", " not", x))
+  text<-sapply(text, function(x) gsub("u.s.", "us", x))
+  text<-sapply(text, function(x) gsub("e.g.", "eg", x))
+  text<-sapply(text, function(x) gsub("i.e.", "ie", x))
+  return(text)}
 ############################################################################
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){
   if(is.na(qdap::word_count(text,missing=0))|qdap::word_count(text,missing=0)<min(ngrams))return(" ") else{
