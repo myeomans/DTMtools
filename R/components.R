@@ -42,9 +42,9 @@ for (x in 1:5){
 }
 text<-gsub("!"," xmark.",text,fixed=T)
 text<-gsub("?"," qmark.",text,fixed=T)
-CTX<-sapply(CTX, function(x) gsub("”", "\"", x))
-CTX<-sapply(CTX, function(x) gsub("“", "\"", x))
-CTX<-sapply(CTX, function(x) gsub("’", "\'", x))
+text<-sapply(text, function(x) gsub("”", "\"", x))
+text<-sapply(text, function(x) gsub("“", "\"", x))
+text<-sapply(text, function(x) gsub("’", "\'", x))
 }
 ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("let's", "let us", x))
@@ -112,14 +112,14 @@ overlaps<-function(high, low, cutoff=.8){
   return(Matrix::cBind(remaining,low))
 }
 ############################################################################
-doublestacker<-function (WDCTX){
-  WDCTX<-as.matrix(WDCTX)
-  WORDS <- colnames(WDCTX)
-  for (Q in WORDS[duplicated(WORDS)]) {
-    WDCTX[, (WORDS == Q) & (!duplicated(WORDS))] <- as.numeric(rowSums(WDCTX[,(WORDS == Q)]))
-    WDCTX[, ((WORDS == Q) & (duplicated(WORDS)))] <- NA
+doublestacker<-function (wdcts){
+  wdcts<-as.matrix(wdcts)
+  words<- colnames(wdcts)
+  for (Q in words[duplicated(words)]) {
+    wdcts[, (words== Q) & (!duplicated(words))] <- as.numeric(rowSums(wdcts[,(words== Q)]))
+    wdcts[, ((words== Q) & (duplicated(words)))] <- NA
   }
-  return(WDCTX[, !is.na(colMeans(WDCTX))])
+  return(wdcts[, !is.na(colMeans(wdcts))])
 }
 ############################################################################
 
