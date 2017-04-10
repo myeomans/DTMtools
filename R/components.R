@@ -25,9 +25,26 @@ cleantext<-function(ex, language="english", stop.words=TRUE){
 ############################################################################
 ctxpand<-function(CTX2){
   CTX2<-sapply(CTX2, function(x) gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", x))
+  CTX2<-gsub("ha ha"," haha ",CTX2,fixed=T)
+  CTX2<-gsub("lol"," haha ",CTX2,fixed=T)
+  CTX2<-gsub("LOL"," haha ",CTX2,fixed=T)
+  CTX2<-gsub("LOl"," haha ",CTX2,fixed=T)
+  CTX2<-gsub("Lol"," haha ",CTX2,fixed=T)
+  for (x in 1:5){
+    CTX2<-gsub(".?","?",CTX2,fixed=T)
+    CTX2<-gsub("?.","?",CTX2,fixed=T)
+    CTX2<-gsub("!?","?",CTX2,fixed=T)
+    CTX2<-gsub("?!","?",CTX2,fixed=T)
+    CTX2<-gsub("??","?",CTX2,fixed=T)
+    CTX2<-gsub("!!","!",CTX2,fixed=T)
+  }
+  CTX2<-gsub("!"," xmark.",CTX2,fixed=T)
+  CTX2<-gsub("?"," qmark.",CTX2,fixed=T)
+  ################################################################
   CTX2<-sapply(CTX2, function(x) gsub("”", "\"", x))
   CTX2<-sapply(CTX2, function(x) gsub("“", "\"", x))
   CTX2<-sapply(CTX2, function(x) gsub("’", "\'", x))
+  ################################################################
   CTX2<-sapply(CTX2, function(x) gsub("let's", "let us", x))
   CTX2<-sapply(CTX2, function(x) gsub("i'm", "i am", x))
   CTX2<-sapply(CTX2, function(x) gsub("won't", "will not", x))
