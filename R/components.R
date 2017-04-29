@@ -61,7 +61,7 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("'ll", " will", x))
   text<-sapply(text, function(x) gsub("'re", " are", x))
   text<-sapply(text, function(x) gsub("n't", " not", x))
-  text<-sapply(text, function(x) gsub("u.s.", "us", x))
+  text<-sapply(text, function(x) gsub("u.s.", "usa", x))
   text<-sapply(text, function(x) gsub("e.g.", "eg", x))
   text<-sapply(text, function(x) gsub("i.e.", "ie", x))
   return(text)}
