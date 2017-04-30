@@ -50,6 +50,7 @@ textformat<-function(text, punct=FALSE){
   return(text)
 }
 ctxpand<-function(text){
+<<<<<<< HEAD
   text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=T))
   text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=T))
   text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=T))
@@ -64,6 +65,22 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("u.s.", "us", x, fixed=T))
   text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=T))
   text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=T))
+=======
+  text<-sapply(text, function(x) gsub("let's", "let us", x))
+  text<-sapply(text, function(x) gsub("i'm", "i am", x))
+  text<-sapply(text, function(x) gsub("won't", "will not", x))
+  text<-sapply(text, function(x) gsub("can't", "cannot", x))
+  text<-sapply(text, function(x) gsub("shan't", "shall not", x))
+  text<-sapply(text, function(x) gsub("'d", " would", x))
+  text<-sapply(text, function(x) gsub("'ve", " have", x))
+  text<-sapply(text, function(x) gsub("'s", " is", x))
+  text<-sapply(text, function(x) gsub("'ll", " will", x))
+  text<-sapply(text, function(x) gsub("'re", " are", x))
+  text<-sapply(text, function(x) gsub("n't", " not", x))
+  text<-sapply(text, function(x) gsub("u.s.", "usa", x))
+  text<-sapply(text, function(x) gsub("e.g.", "eg", x))
+  text<-sapply(text, function(x) gsub("i.e.", "ie", x))
+>>>>>>> 77c9c7c2bba7189506c14cce955fa13348b687e0
   return(text)}
 ############################################################################
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){
