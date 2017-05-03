@@ -50,7 +50,6 @@ textformat<-function(text, punct=FALSE){
   return(text)
 }
 ctxpand<-function(text){
-<<<<<<< HEAD
   text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=T))
   text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=T))
   text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=T))
@@ -65,7 +64,6 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("u.s.", "us", x, fixed=T))
   text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=T))
   text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=T))
-=======
   text<-sapply(text, function(x) gsub("let's", "let us", x))
   text<-sapply(text, function(x) gsub("i'm", "i am", x))
   text<-sapply(text, function(x) gsub("won't", "will not", x))
@@ -80,7 +78,6 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("u.s.", "usa", x))
   text<-sapply(text, function(x) gsub("e.g.", "eg", x))
   text<-sapply(text, function(x) gsub("i.e.", "ie", x))
->>>>>>> 77c9c7c2bba7189506c14cce955fa13348b687e0
   return(text)}
 ############################################################################
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){
