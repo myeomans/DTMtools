@@ -1,26 +1,16 @@
-library(spacyr)
-spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
+#library(spacyr)
+#spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
 
-# pt<-read.csv("plan_text.csv",stringsAsFactors = F)
-# # pt<-pt[(pt$anyplans==1)&(qdap::word_count(pt$planSPELL,missing=0)>5),]
-# texts<-pt$planSPELL[20:30]
-# wstem="all"
-# ngrams=1:3
-# language="english"
-# punct=F
-# stop.words=TRUE
-# overlap=1
-# verbose=TRUE
 ################################################################
-pos.tokens<-function(texts,
+pos_tokens<-function(texts,
                      wstem="all",
                      ngrams=1,
                      language="english",
-                     punct=F,
+                     punct=FALSE,
                      stop.words=TRUE,
                      overlap=1,
                      verbose=FALSE){
-  texts<-textformat(texts, punct)
+  texts<-textformat(texts, FALSE)
   texts<-ctxpand(texts)
   texts<-gsub("||",".",texts,fixed=T)
   names(texts)<-1:length(texts)

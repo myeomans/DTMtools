@@ -1,4 +1,4 @@
-ngram.tokens<-function(texts,
+ngram_tokens<-function(texts,
                        wstem="all",
                        ngrams=1,
                        language="english",

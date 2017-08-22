@@ -9,17 +9,17 @@ DTM<-function(texts, sparse=0.99, wstem="all",
               ngrams=1, overlap=1,
               vocabmatch=NULL,
               language="english",
-              punct=F,
+              punct=FALSE,
               TPformat=FALSE,
               stop.words=TRUE,
               group.conc=NA,
               group.conc.cutoff=0.8,
-              POS=F,
+              POS=FALSE,
               verbose=FALSE){
   if(POS){
-    dtm<-pos.tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
+    dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
   } else {
-    dtm<-ngram.tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
+    dtm<-ngram_tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
   }
   #######################################################
   dtm<-doublestacker(dtm)
