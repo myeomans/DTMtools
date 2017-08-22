@@ -99,14 +99,18 @@ ngrammer <- function (onewords, ngram){
   if(len<ngram){
     return(" ")
   }else{
+    if (ngram==1){
+      words<-onewords
+    }
     if (ngram==2){
       twowords<-cbind(onewords[1:(len-1)], onewords[2:len])
-      return(apply(twowords, 1, function(x) paste0(x, collapse="_")))
+      words<-apply(twowords, 1, function(x) paste0(x, collapse="_"))
     }
     if (ngram==3){
       threewords<-cbind(onewords[1:(len-2)], onewords[2:(len-1)], onewords[3:len])
-      return(apply(threewords, 1, function(x) paste0(x, collapse="_")))
+      words<-apply(threewords, 1, function(x) paste0(x, collapse="_"))
     }
+    return(paste(words, collapse=" "))
   }
 }
 ############################################################################

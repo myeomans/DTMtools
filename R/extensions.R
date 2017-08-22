@@ -30,12 +30,6 @@ DTMmatch<-function(hole, peg){
 ############################################################################
 stemlist<-function(vocab, texts, wstem="all",
                    ngrams=1,language="english", stop.words=TRUE){
-  # vocab=colnames(TEXT)
-  # texts<-SLIM$cleantext3[1:200]
-  # ngrams<-1:3
-  # language="spanish"
-  # stop.words=TRUE
-  # wstem="all"
 
   if(mean(ngrams==1)!=1){
     cleanertext<-unlist(sapply(texts, cleantext, language, stop.words))
