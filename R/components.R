@@ -132,6 +132,8 @@ overlaps<-function(high, low, cutoff=.8){
   remaining<-high[,peaks<=cutoff]
   return(Matrix::cBind(remaining,low))
 }
+
+cosdist<-function(x,y) return(x %*% y / sqrt(x%*%x * y%*%y))
 ############################################################################
 doublestacker<-function (wdcts){
   wdcts<-as.matrix(wdcts)
