@@ -7,6 +7,7 @@ ngram.tokens<-function(texts,
                        stop.words=TRUE,
                        overlap=1,
                        verbose=FALSE){
+  cleanertext<-unlist(sapply(texts, cleantext, language, stop.words))
   dgm<-list()
   for (ng in 1:length(ngrams)){
     tokens<-unlist(sapply(cleanertext, function(x) gramstem(x, wstem, ngrams[ng], language)))
