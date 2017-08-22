@@ -1,7 +1,7 @@
 ############################################################################
 # Underlying functions for DTM
 ############################################################################
-cleantext<-function(ex, language="english", stop.words=TRUE, punct=F){
+cleantext<-function(ex, language="english", stop.words=TRUE, punct=FALSE, nums=TRUE){
   #PUTS ALL LETTERS IN LOWER CASE
   ex<-tolower(ex)
   ex<-textformat(ex, punct)
@@ -19,7 +19,7 @@ cleantext<-function(ex, language="english", stop.words=TRUE, punct=F){
     ex<-tm::removeWords(ex, tm::stopwords(language))
   }
   #DELETES NUMBERS
-  ex<-tm::removeNumbers(ex)
+  if(nums) ex<-tm::removeNumbers(ex)
   ex<-tm::stripWhitespace(ex)
   return(as.character(ex))
 }
@@ -35,7 +35,7 @@ textformat<-function(text, punct=FALSE){
   text<-gsub("LOL"," haha ",text,fixed=T)
   text<-gsub("LOl"," haha ",text,fixed=T)
   text<-gsub("Lol"," haha ",text,fixed=T)
-  for (x in 1:5){
+  for (x in 1:8){
     text<-gsub(".?","?",text,fixed=T)
     text<-gsub("?.","?",text,fixed=T)
     text<-gsub("!?","?",text,fixed=T)
@@ -47,6 +47,8 @@ textformat<-function(text, punct=FALSE){
     text<-gsub("!"," xmark.",text,fixed=T)
     text<-gsub("?"," qmark.",text,fixed=T)
   }
+  text<-gsub("||",". ",text,fixed=T)
+  text<-gsub("|",". ",text,fixed=T)
   return(text)
 }
 ctxpand<-function(text){
@@ -54,6 +56,10 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=T))
   text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=T))
   text<-sapply(text, function(x) gsub("can't", "cannot", x, fixed=T))
+  text<-sapply(text, function(x) gsub("Let's", "Let us", x, fixed=T))
+  text<-sapply(text, function(x) gsub("I'm", "I am", x, fixed=T))
+  text<-sapply(text, function(x) gsub("Won't", "Will not", x, fixed=T))
+  text<-sapply(text, function(x) gsub("Can't", "Cannot", x, fixed=T))
   text<-sapply(text, function(x) gsub("shan't", "shall not", x, fixed=T))
   text<-sapply(text, function(x) gsub("'d", " would", x, fixed=T))
   text<-sapply(text, function(x) gsub("'ve", " have", x, fixed=T))
@@ -61,23 +67,11 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("'ll", " will", x, fixed=T))
   text<-sapply(text, function(x) gsub("'re", " are", x, fixed=T))
   text<-sapply(text, function(x) gsub("n't", " not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("u.s.", "us", x, fixed=T))
+  text<-sapply(text, function(x) gsub("u.s.", "US", x, fixed=T))
+  text<-sapply(text, function(x) gsub("U.S.", "US", x, fixed=T))
   text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=T))
   text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=T))
-  text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=T))
-  text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=T))
-  text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("can't", "cannot", x, fixed=T))
-  text<-sapply(text, function(x) gsub("shan't", "shall not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'d", " would", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'ve", " have", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'s", " is", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'ll", " will", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'re", " are", x, fixed=T))
-  text<-sapply(text, function(x) gsub("n't", " not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("u.s.", "usa", x, fixed=T))
-  text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=T))
-  text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=T))
+
   return(text)}
 ############################################################################
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){

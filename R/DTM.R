@@ -6,15 +6,16 @@ require(SnowballC)
 # THE BIG WRAPPER FUNCTION
 ############################################################################
 DTM<-function(texts, sparse=0.99, wstem="all",
-              ngrams=1, overlap=1,
-              vocabmatch=NULL,
+              ngrams=1,
               language="english",
-              punct=FALSE,
-              TPformat=FALSE,
+              vocabmatch=NULL,
               stop.words=TRUE,
+              POS=FALSE,
+              punct=FALSE,
+              overlap=1,
               group.conc=NA,
               group.conc.cutoff=0.8,
-              POS=FALSE,
+              TPformat=FALSE,
               verbose=FALSE){
   if(POS){
     dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)

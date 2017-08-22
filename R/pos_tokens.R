@@ -12,16 +12,22 @@ pos_tokens<-function(texts,
                      verbose=FALSE){
   texts<-textformat(texts, FALSE)
   texts<-ctxpand(texts)
-  texts<-gsub("||",".",texts,fixed=T)
   names(texts)<-1:length(texts)
   parsedtxt <- spacyr::spacy_parse(texts, dependency=T,lemma=T,pos=T,tag=T,entity=T)
+  parsedtxt<-parsedtxt[!(parsedtxt$pos%in%c("PUNCT","SPACE","SYM")),]
   cleantoken<-unlist(sapply(parsedtxt$token, cleantext, language, stop.words, punct, USE.NAMES=F))
   if(length(wstem)>1) cleantoken<-sapply(cleantoken, function(x) stemexcept(x, wstem, language), USE.NAMES=F)
   if(wstem=="all") cleantoken<-sapply(cleantoken, SnowballC::wordStem, language=language, USE.NAMES=F)
   parsedtxt$cleantoken<-cleantoken
-  parsedtxt$clean_pos<-paste0(parsedtxt$cleantoken,"_",parsedtxt$tag)
-  parsedtxt<-parsedtxt[!(parsedtxt$pos%in%c("PUNCT","SPACE","SYM")),]
-  parsedtxt<-parsedtxt[!(parsedtxt$cleantoken%in%c("")),]
+  #parsedtxt<-parsedtxt[!(parsedtxt$cleantoken%in%c(""," ","  ")),]
+  #parsedtxt$clean_pos<-paste0(parsedtxt$cleantoken,"_",parsedtxt$tag)
+  ######
+  parsedtxt$cleanlemma<-parsedtxt$lemma
+  parsedtxt[parsedtxt$cleanlemma=="-PRON-",]$cleanlemma<-parsedtxt[parsedtxt$cleanlemma=="-PRON-",]$token
+  parsedtxt$cleanlemma<-unlist(sapply(parsedtxt$cleanlemma, cleantext, language, stop.words, punct, nums=FALSE, USE.NAMES=F))
+  parsedtxt<-parsedtxt[!(parsedtxt$cleanlemma%in%c(""," ","  ")),]
+  parsedtxt$clean_pos<-paste0(parsedtxt$cleanlemma,"_",parsedtxt$tag)
+  ######
   pos_words<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"clean_pos"]))
   dgm<-list()
   for (ng in 1:length(ngrams)){
