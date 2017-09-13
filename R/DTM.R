@@ -18,9 +18,9 @@ DTM<-function(texts, sparse=0.99, wstem="all",
               TPformat=FALSE,
               verbose=FALSE){
   #if(POS){
-  #  dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
+  #  dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, verbose)
   #} else {
-    dtm<-ngram_tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
+    dtm<-ngram_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, verbose)
   #}
   #######################################################
   dtm<-doublestacker(dtm)

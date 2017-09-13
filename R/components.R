@@ -92,7 +92,6 @@ gramstem<-function(text, wstem="all", ngrams=1, language="english"){
     xes<-xes[which(nchar(xes)>0)]
     if(length(wstem)>1) xes<-sapply(xes, function(x) stemexcept(x, wstem, language), USE.NAMES=F)
     if(wstem=="all") xes<-sapply(xes, SnowballC::wordStem, language=language, USE.NAMES=F)
-    xret<-" "
     if (1 %in% ngrams) xret<-paste(c(xret, xes), collapse=" ")
     if (2 %in% ngrams) xret<-paste(c(xret, ngrammer(xes, 2)), collapse=" ")
     if (3 %in% ngrams) xret<-paste(c(xret, ngrammer(xes, 3)), collapse=" ")

@@ -18,7 +18,7 @@ ngram_tokens<-function(texts,
     dgm[[ng]]<-dgm[[ng]][,colSums(dgm[[ng]])>1]
     if (ng==1) dtm<-dgm[[1]]
     if (ng>1){
-      if (overlap!=1) dtm<-overlaps(dtm, dgm[[ng]], overlap)
+      #if (overlap!=1) dtm<-overlaps(dtm, dgm[[ng]], overlap)
       if (overlap==1) dtm<-Matrix::cBind(dtm, as.matrix(dgm[[ng]]))
     }
     if (verbose) print(paste(c(ng, dim(dtm),dim(dgm[[ng]]))))
