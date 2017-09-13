@@ -1,7 +1,7 @@
-require(tm)
-require(qdap)
-require(Matrix)
-require(SnowballC)
+library(tm)
+library(qdap)
+library(Matrix)
+library(SnowballC)
 ############################################################################
 # THE BIG WRAPPER FUNCTION
 ############################################################################
@@ -17,11 +17,11 @@ DTM<-function(texts, sparse=0.99, wstem="all",
               group.conc.cutoff=0.8,
               TPformat=FALSE,
               verbose=FALSE){
-  if(POS){
-    dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
-  } else {
+  #if(POS){
+  #  dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
+  #} else {
     dtm<-ngram_tokens(texts,wstem,ngrams,language,punct,stop.words, verbose)
-  }
+  #}
   #######################################################
   dtm<-doublestacker(dtm)
   if (sparse<1) dtm<-dtm[,colMeans(dtm>0)>=(1-sparse)]

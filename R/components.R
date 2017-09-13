@@ -30,12 +30,17 @@ textformat<-function(text, punct=FALSE){
   text<-sapply(text, function(x) gsub("”", "\"", x))
   text<-sapply(text, function(x) gsub("“", "\"", x))
   text<-sapply(text, function(x) gsub("’", "\'", x))
-  text<-gsub("ha ha"," haha ",text,fixed=T)
-  text<-gsub("lol"," haha ",text,fixed=T)
-  text<-gsub("LOL"," haha ",text,fixed=T)
-  text<-gsub("LOl"," haha ",text,fixed=T)
-  text<-gsub("Lol"," haha ",text,fixed=T)
-  for (x in 1:8){
+
+  #laugh.from<-c("ha ha","lol","LOL","Lol","LOl","LoL","ROFL","rofl")
+
+  #text<-gsub(laugh.from," haha ",text,fixed=T)
+
+  # text<-gsub("ha ha"," haha ",text,fixed=T)
+  # text<-gsub("lol"," haha ",text,fixed=T)
+  # text<-gsub("LOL"," haha ",text,fixed=T)
+  # text<-gsub("LOl"," haha ",text,fixed=T)
+  # text<-gsub("Lol"," haha ",text,fixed=T)
+  for (x in 1:5){
     text<-gsub(".?","?",text,fixed=T)
     text<-gsub("?.","?",text,fixed=T)
     text<-gsub("!?","?",text,fixed=T)
@@ -51,6 +56,7 @@ textformat<-function(text, punct=FALSE){
   text<-gsub("|",". ",text,fixed=T)
   return(text)
 }
+
 ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=T))
   text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=T))
