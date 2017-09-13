@@ -31,16 +31,20 @@ textformat<-function(text, punct=FALSE){
   text<-sapply(text, function(x) gsub("“", "\"", x))
   text<-sapply(text, function(x) gsub("’", "\'", x))
 
-  #laugh.from<-c("ha ha","lol","LOL","Lol","LOl","LoL","ROFL","rofl")
-
-  #text<-gsub(laugh.from," haha ",text,fixed=T)
-
   text<-gsub("ha ha"," haha ",text,fixed=T)
-  text<-gsub("lol"," haha ",text,fixed=T)
+  text<-gsub("lol "," haha ",text,fixed=T)
+  text<-gsub("lol."," haha.",text,fixed=T)
+  text<-gsub("lol!"," haha!",text,fixed=T)
+  text<-gsub("Lol "," haha ",text,fixed=T)
+  text<-gsub("Lol."," haha.",text,fixed=T)
+  text<-gsub("Lol!"," haha!",text,fixed=T)
   text<-gsub("LOL"," haha ",text,fixed=T)
   text<-gsub("LOl"," haha ",text,fixed=T)
-  text<-gsub("Lol"," haha ",text,fixed=T)
-  for (x in 1:5){
+  text<-gsub("LOl"," haha ",text,fixed=T)
+  text<-gsub("LoL"," haha ",text,fixed=T)
+  text<-gsub("ROFL"," haha ",text,fixed=T)
+  text<-gsub("rofl"," haha ",text,fixed=T)
+  for (x in 1:8){
     text<-gsub(".?","?",text,fixed=T)
     text<-gsub("?.","?",text,fixed=T)
     text<-gsub("!?","?",text,fixed=T)
