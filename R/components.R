@@ -35,11 +35,11 @@ textformat<-function(text, punct=FALSE){
 
   #text<-gsub(laugh.from," haha ",text,fixed=T)
 
-  # text<-gsub("ha ha"," haha ",text,fixed=T)
-  # text<-gsub("lol"," haha ",text,fixed=T)
-  # text<-gsub("LOL"," haha ",text,fixed=T)
-  # text<-gsub("LOl"," haha ",text,fixed=T)
-  # text<-gsub("Lol"," haha ",text,fixed=T)
+  text<-gsub("ha ha"," haha ",text,fixed=T)
+  text<-gsub("lol"," haha ",text,fixed=T)
+  text<-gsub("LOL"," haha ",text,fixed=T)
+  text<-gsub("LOl"," haha ",text,fixed=T)
+  text<-gsub("Lol"," haha ",text,fixed=T)
   for (x in 1:5){
     text<-gsub(".?","?",text,fixed=T)
     text<-gsub("?.","?",text,fixed=T)
@@ -81,7 +81,9 @@ ctxpand<-function(text){
   return(text)}
 ############################################################################
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){
-  if(is.na(qdap::word_count(text,missing=0))|qdap::word_count(text,missing=0)<min(ngrams))return(" ") else{
+  if(nchar(text)%in%c(NA,NULL,0:2)){
+    return(text)
+    }else{
     xes<-(strsplit(text, split=" ")[[1]])
     xes<-xes[which(nchar(xes)>0)]
     if(length(wstem)>1) xes<-sapply(xes, function(x) stemexcept(x, wstem, language), USE.NAMES=F)
