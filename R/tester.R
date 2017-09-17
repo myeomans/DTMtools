@@ -16,3 +16,8 @@
 
 
 #dtm.text<-DTM(texts,ngrams=2)
+#
+# p.t<-proc.time()[3]
+# high<-DTM(phone_offers$message,ngrams=1:2,overlap=.9)
+# dim(high)
+# proc.time()[3]-p.t

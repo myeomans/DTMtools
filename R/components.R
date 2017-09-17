@@ -1,21 +1,21 @@
 ############################################################################
 # Underlying functions for DTM
 ############################################################################
-cleantext<-function(ex, language="english", stop.words=TRUE, punct=FALSE, nums=TRUE){
+cleantext<-function(ex, language="english", stop.words=TRUE, punct=FALSE, nums=TRUE, pos_tag=FALSE){
   #PUTS ALL LETTERS IN LOWER CASE
-  ex<-tolower(ex)
+  if(!pos_tag) ex<-tolower(ex)
   ex<-textformat(ex, punct)
   #EXPANDS CONTRACTIONS
   if(language=="english"){
     ex<-ctxpand(ex)
   }
   #DELETES PUNCTUATION & HTML JUNK
-  ex<-gsub("[[:punct:]]", " ", ex)
+  if(!pos_tag) ex<-gsub("[[:punct:]]", " ", ex)
   ex<-gsub("[[:cntrl:]]", " ", ex)
   #DELETES STOP WORDS
-  if(length(stop.words)>1){
+  if((length(stop.words)>1)&(!pos_tag)){
     ex<-tm::removeWords(ex, stop.words)
-  }else if(stop.words){
+  }else if((stop.words)&(!pos_tag)){
     ex<-tm::removeWords(ex, tm::stopwords(language))
   }
   #DELETES NUMBERS
@@ -87,7 +87,7 @@ ctxpand<-function(text){
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){
   if(nchar(text)%in%c(NA,NULL,0:2)){
     return(text)
-    }else{
+  }else{
     xes<-(strsplit(text, split=" ")[[1]])
     xes<-xes[which(nchar(xes)>0)]
     if(length(wstem)>1) xes<-sapply(xes, function(x) stemexcept(x, wstem, language), USE.NAMES=F)
@@ -127,19 +127,21 @@ stemexcept<-function(sentence, excepts, language="english"){
   return(paste(words, collapse=" "))
 }
 ############################################################################
-overlaps<-function(high, low, cutoff=.8){
-  #if(sum(colnames(low) %in% colnames(high))>0){
-  # for(CN in colnames(low)[colnames(low) %in% colnames(high)]){
-  # low[,CN]<-low[,CN]+high[,CN]
-  #high[,CN]<-high[,-CN]
-  #}
-  #}
-  peaks<-apply(high, 2, function(x) max(apply(low, 2, function(y) cosdist(x, y))))
-  remaining<-high[,peaks<=cutoff]
-  return(Matrix::cBind(remaining,low))
-}
+overlaps<-function(high, low, cutoff=.9){
+  combined<-Matrix::cBind(high,low)
+  if(cutoff<1){
+    tmp <- cor(as.matrix(combined))
+    tmp[!upper.tri(tmp)] <- 0
+    combined <- combined[,apply(tmp,2,function(x) all(abs(x) < cutoff))]
 
-cosdist<-function(x,y) return(x %*% y / sqrt(x%*%x * y%*%y))
+    # Should do PMI at some point...
+
+    # peaks<-apply(high, 2, function(x) max(apply(low, 2, function(y) cosdist(x, y))))
+    # remaining<-high[,peaks<=cutoff]
+    # combined<-Matrix::cBind(remaining,low)
+  }
+  return(combined)
+}
 ############################################################################
 doublestacker<-function (wdcts){
   wdcts<-as.matrix(wdcts)
@@ -154,14 +156,14 @@ doublestacker<-function (wdcts){
 
 # filters out group-specific words
 # based on concentration (i.e. % of occurrences that fall in most common group)
-group.max.conc<-function(texts,groups, cutoff=0.8){
+group.max.conc<-function(dtm,groups, cutoff=0.8){
   group.id<-unique(groups)
-  cts<-array(NA, c(ncol(texts),length(group.id)))
+  cts<-array(NA, c(ncol(dtm),length(group.id)))
   for(g in 1:length(group.id)){
-    cts[,g]<-colSums(texts[groups==group.id[g],])
+    cts[,g]<-colSums(dtm[groups==group.id[g],])
   }
   max.conc<-apply(cts,1,max)/rowSums(cts)
-  return(texts[,max.conc<cutoff])
+  return(dtm[,max.conc<cutoff])
   #return(list(conc=max.conc,
   #            cts=cts))
 }

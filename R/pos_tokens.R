@@ -34,14 +34,14 @@ pos_tokens<-function(texts,
     dgm[[ng]] <- as.matrix(quanteda::dfm(unlist(lapply(pos_words, ngrammer, ngrams[ng])),tolower=F))
     dgm[[ng]]<-dgm[[ng]][,colSums(dgm[[ng]])>1]
     if (ng==1) dpm<-dgm[[1]]
-    if (ng>1){
-      if (overlap!=1) dpm<-overlaps(dpm, dgm[[ng]], overlap)
-      if (overlap==1) dpm<-Matrix::cBind(dpm, as.matrix(dgm[[ng]]))
-    }
+    if (ng>1) dpm<-overlaps(dpm, dgm[[ng]], overlap)
+
     if (verbose) print(paste(c(ng, dim(dpm),dim(dgm[[ng]]))))
   }
+  dpm<-doublestacker(dpm)
   return(dpm)
 }
+
 head_token_grab<-function(x, data){
   return(data[(data$doc_id==data[x,]$doc_id)&(data$sentence_id==data[x,]$sentence_id)&(data$token_id==data[x,"head_token_id"]),"token"])
 }

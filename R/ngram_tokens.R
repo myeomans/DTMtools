@@ -17,13 +17,10 @@ ngram_tokens<-function(texts,
     dgm[[ng]] <- as.matrix(quanteda::dfm(tokens))
     dgm[[ng]]<-dgm[[ng]][,colSums(dgm[[ng]])>1]
     if (ng==1) dtm<-dgm[[1]]
-    if (ng>1){
-      dtm<-Matrix::cBind(dtm, as.matrix(dgm[[ng]]))
-      #if (overlap!=1) dtm<-overlaps(dtm, dgm[[ng]], overlap)
-      #if (overlap==1) dtm<-Matrix::cBind(dtm, as.matrix(dgm[[ng]]))
-    }
+    if (ng>1) dtm<-overlaps(dtm, dgm[[ng]], overlap)
+
     if (verbose) print(paste(c(ng, dim(dtm),dim(dgm[[ng]]))))
   }
-
+  dtm<-doublestacker(dtm)
   return(dtm)
 }
