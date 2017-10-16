@@ -11,7 +11,6 @@ cleantext<-function(ex, language="english", stop.words=TRUE, punct=FALSE, nums=T
   }
   #DELETES PUNCTUATION & HTML JUNK
   if(!pos_tag) ex<-gsub("[[:punct:]]", " ", ex)
-  ex<-gsub("[[:cntrl:]]", " ", ex)
   #DELETES STOP WORDS
   if((length(stop.words)>1)&(!pos_tag)){
     ex<-tm::removeWords(ex, stop.words)
@@ -58,6 +57,7 @@ textformat<-function(text, punct=FALSE){
   }
   text<-gsub("||",". ",text,fixed=T)
   text<-gsub("|",". ",text,fixed=T)
+  text<-gsub("[[:cntrl:]]", " ", text)
   return(text)
 }
 

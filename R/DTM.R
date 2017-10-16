@@ -15,6 +15,7 @@ DTM<-function(texts,
               group.conc.cutoff=0.8,
               TPformat=FALSE,
               verbose=FALSE){
+
   #######################################################
   if(!is.null(vocabmatch)){
     if(is.null(dim(vocabmatch))){

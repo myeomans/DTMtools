@@ -1,5 +1,5 @@
-#library(spacyr)
-#spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
+# library(spacyr)
+# spacyr::spacy_initialize(python_executable = "/Users/mikeyeomans/anaconda3/bin/python")
 
 ################################################################
 pos_tokens<-function(texts,
@@ -10,25 +10,46 @@ pos_tokens<-function(texts,
                      stop.words=TRUE,
                      overlap=1,
                      verbose=FALSE){
+
+  ptxt<-read.csv("plan_text.csv",stringsAsFactors = F)
+
+  texts=ptxt$planSPELL[ptxt$anyplans==1][1:1000]
+  wstem="all"
+  ngrams=1
+  language="english"
+  punct=FALSE
+  stop.words=TRUE
+  overlap=1
+  verbose=FALSE
+
+
   texts<-textformat(texts, FALSE)
   texts<-ctxpand(texts)
+
   names(texts)<-1:length(texts)
+  texts[texts==""]<-" "
   parsedtxt <- spacyr::spacy_parse(texts, dependency=T,lemma=T,pos=T,tag=T,entity=T)
   parsedtxt<-parsedtxt[!(parsedtxt$pos%in%c("PUNCT","SPACE","SYM")),]
-  cleantoken<-unlist(sapply(parsedtxt$token, cleantext, language, stop.words, punct, USE.NAMES=F))
-  if(length(wstem)>1) cleantoken<-sapply(cleantoken, function(x) stemexcept(x, wstem, language), USE.NAMES=F)
-  if(wstem=="all") cleantoken<-sapply(cleantoken, SnowballC::wordStem, language=language, USE.NAMES=F)
-  parsedtxt$cleantoken<-cleantoken
-  #parsedtxt<-parsedtxt[!(parsedtxt$cleantoken%in%c(""," ","  ")),]
-  #parsedtxt$clean_pos<-paste0(parsedtxt$cleantoken,"_",parsedtxt$tag)
   ######
   parsedtxt$cleanlemma<-parsedtxt$lemma
   parsedtxt[parsedtxt$cleanlemma=="-PRON-",]$cleanlemma<-parsedtxt[parsedtxt$cleanlemma=="-PRON-",]$token
-  parsedtxt$cleanlemma<-unlist(sapply(parsedtxt$cleanlemma, cleantext, language, stop.words, punct, nums=FALSE, USE.NAMES=F))
+  parsedtxt$cleanlemma<-tolower(parsedtxt$cleanlemma)
   parsedtxt<-parsedtxt[!(parsedtxt$cleanlemma%in%c(""," ","  ")),]
-  parsedtxt$clean_pos<-paste0(parsedtxt$cleanlemma,"_",parsedtxt$tag)
   ######
-  pos_words<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"clean_pos"]))
+  if((length(stop.words)>1)){
+    parsedtxt<-parsedtxt[!(parsedtxt$cleanlemma%in%stop.words),]
+  }else if(stop.words){
+    parsedtxt<-parsedtxt[!(parsedtxt$cleanlemma%in%tm::stopwords(language)),]
+  }
+  ######
+
+
+
+  parsedtxt$clean_pos<-paste0(parsedtxt$cleanlemma,"_",parsedtxt$pos)
+  ######
+  pos_words<-parallel::mclapply(unique(parsedtxt$doc_id),
+                                function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"clean_pos"]),
+                                mc.cores= parallel::detectCores())
   dgm<-list()
   for (ng in 1:length(ngrams)){
     dgm[[ng]] <- as.matrix(quanteda::dfm(unlist(lapply(pos_words, ngrammer, ngrams[ng])),tolower=F))
@@ -40,8 +61,4 @@ pos_tokens<-function(texts,
   }
   dpm<-doublestacker(dpm)
   return(dpm)
-}
-
-head_token_grab<-function(x, data){
-  return(data[(data$doc_id==data[x,]$doc_id)&(data$sentence_id==data[x,]$sentence_id)&(data$token_id==data[x,"head_token_id"]),"token"])
 }
