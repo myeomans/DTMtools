@@ -16,5 +16,4 @@ Imports:
     quanteda,
     ggplot2,
     parallel,
-    Matrix,
     spacyr

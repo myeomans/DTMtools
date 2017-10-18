@@ -37,16 +37,15 @@ DTM<-function(texts,
     dtm<-ngram_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, verbose)
   }
   #######################################################
-  sdtm<-Matrix::Matrix(dtm, sparse=T)
-  #if(!TPformat) return(sdtm)
-  if ((sparse<1)&!is.na(sparse)) sdtm<-sdtm[,colMeans(sdtm>0)>=(1-sparse)]
-  if(!is.null(group.conc)) sdtm<-group.max.conc(sdtm, group.conc, cutoff=group.conc.cutoff)
-  if(!is.null(vocabmatch)) sdtm<-DTMmatch(vocabmatch, sdtm)
+  #if(!TPformat) return(dtm)
+  if ((sparse<1)&!is.na(sparse)) dtm<-dtm[,colMeans(dtm>0)>=(1-sparse)]
+  if(!is.null(group.conc)) dtm<-group.max.conc(dtm, group.conc, cutoff=group.conc.cutoff)
+  if(!is.null(vocabmatch)) dtm<-DTMmatch(vocabmatch, dtm)
   # #######################################################
-  if(!TPformat) return(sdtm)
+  if(!TPformat) return(dtm)
   if(TPformat){
-    documents<-lapply(1:nrow(sdtm), function(x) (rbind(which(sdtm[x,]>0), sdtm[x,][sdtm[x,]>0])))
-    vocab <- as.character(colnames(sdtm))
+    documents<-lapply(1:nrow(dtm), function(x) (rbind(which(dtm[x,]>0), dtm[x,][dtm[x,]>0])))
+    vocab <- as.character(colnames(dtm))
     return(list(documents=documents,
                 vocab=vocab,
                 meta=NULL,
