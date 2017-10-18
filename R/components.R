@@ -1,26 +1,26 @@
 ############################################################################
 # Underlying functions for DTM
 ############################################################################
-cleantext<-function(ex, language="english", stop.words=TRUE, punct=FALSE, nums=TRUE, pos_tag=FALSE){
+cleantext<-function(text, language="english", stop.words=TRUE, punct=FALSE, nums=TRUE, pos_tag=FALSE){
   #PUTS ALL LETTERS IN LOWER CASE
-  if(!pos_tag) ex<-tolower(ex)
-  ex<-textformat(ex, punct)
+  if(!pos_tag) text<-tolower(text)
+  text<-textformat(text, punct)
   #EXPANDS CONTRACTIONS
   if(language=="english"){
-    ex<-ctxpand(ex)
+    text<-ctxpand(text)
   }
   #DELETES PUNCTUATION & HTML JUNK
-  if(!pos_tag) ex<-gsub("[[:punct:]]", " ", ex)
+  if(!pos_tag) text<-gsub("[[:punct:]]", " ", text)
   #DELETES STOP WORDS
   if((length(stop.words)>1)&(!pos_tag)){
-    ex<-tm::removeWords(ex, stop.words)
+    text<-tm::removeWords(text, stop.words)
   }else if((stop.words)&(!pos_tag)){
-    ex<-tm::removeWords(ex, tm::stopwords(language))
+    text<-tm::removeWords(text, tm::stopwords(language))
   }
   #DELETES NUMBERS
-  if(nums) ex<-tm::removeNumbers(ex)
-  ex<-tm::stripWhitespace(ex)
-  return(as.character(ex))
+  if(nums) text<-tm::removeNumbers(text)
+  text<-tm::stripWhitespace(text)
+  return(as.character(text))
 }
 ############################################################################
 textformat<-function(text, punct=FALSE){

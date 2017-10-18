@@ -7,7 +7,7 @@ ngram_tokens<-function(texts,
                        overlap=1,
                        verbose=FALSE){
 
-  cleanertext<-unlist(parallel::mclapply(texts, cleantext, language, stop.words,
+  cleanertext<-unlist(parallel::mclapply(texts, cleantext, language, stop.words, punct,
                                          mc.cores = parallel::detectCores()))
 
   dgm<-lapply(ngrams, function(x) as.matrix(array(NA, c(length(texts),100))))
