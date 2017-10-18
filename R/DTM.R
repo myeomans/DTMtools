@@ -39,7 +39,7 @@ DTM<-function(texts,
   #######################################################
   sdtm<-Matrix::Matrix(dtm, sparse=T)
   #if(!TPformat) return(sdtm)
-  if ((sparse<1)) sdtm<-sdtm[,colMeans(sdtm>0)>=(1-sparse)]
+  if ((sparse<1)&!is.na(sparse)) sdtm<-sdtm[,colMeans(sdtm>0)>=(1-sparse)]
   if(!is.null(group.conc)) sdtm<-group.max.conc(sdtm, group.conc, cutoff=group.conc.cutoff)
   if(!is.null(vocabmatch)) sdtm<-DTMmatch(vocabmatch, sdtm)
   # #######################################################
