@@ -1,7 +1,7 @@
 Package: DTMtools
 Type: Package
 Title: Adjustable Feature Counting for Text Analysis
-Version: 0.2.2
+Version: 0.2.3
 Author: Mike Yeomans
 Maintainer: Mike Yeomans <mk.yeomans@gmail.com>
 Description: Handles a variety of tokenization options. Also ports data into STM format.
