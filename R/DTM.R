@@ -38,11 +38,12 @@ DTM<-function(texts,
   }
   #######################################################
   sdtm<-Matrix::Matrix(dtm, sparse=T)
-  if ((sparse<1)) sdtm<-sdtm[,colMeans(sdtm>0)>=(1-sparse)]
-  if(!is.null(group.conc)) sdtm<-group.max.conc(sdtm, group.conc, cutoff=group.conc.cutoff)
-  if(!is.null(vocabmatch)) sdtm<-DTMmatch(vocabmatch, sdtm)
-  #######################################################
   if(!TPformat) return(sdtm)
+  # if ((sparse<1)) sdtm<-sdtm[,colMeans(sdtm>0)>=(1-sparse)]
+  # if(!is.null(group.conc)) sdtm<-group.max.conc(sdtm, group.conc, cutoff=group.conc.cutoff)
+  # if(!is.null(vocabmatch)) sdtm<-DTMmatch(vocabmatch, sdtm)
+  # #######################################################
+  # if(!TPformat) return(sdtm)
   if(TPformat){
     documents<-lapply(1:nrow(sdtm), function(x) (rbind(which(sdtm[x,]>0), sdtm[x,][sdtm[x,]>0])))
     vocab <- as.character(colnames(sdtm))
