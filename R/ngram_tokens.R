@@ -11,6 +11,7 @@ ngram_tokens<-function(texts,
                                          mc.cores = parallel::detectCores()))
 
   dgm<-lapply(ngrams, function(x) as.matrix(array(NA, c(length(texts),100))))
+  token.list<-list()
   for (ng in 1:length(ngrams)){
     tokens<-unlist(parallel::mclapply(cleanertext, gramstem, wstem=wstem, ngrams=ngrams[ng], language=language,
                                       mc.cores= parallel::detectCores()))
