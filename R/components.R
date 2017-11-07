@@ -133,9 +133,13 @@ overlaps<-function(high, low, cutoff=.9){
     combined<-cbind(as.matrix(high),as.matrix(low))
   } else {
     high<-as.matrix(high)
-    low<-as.matrix(low)
-    tmp <- apply(low,2,function(x) apply(high,2, function(y) cor(x,y)))
-    combined<-cbind(high,low[,apply(tmp,2,max)<cutoff])
+    low<-lapply(colnames(low),function(x)as.vector(low[,x]))
+
+    low_max <- unlist(parallel::mclapply(low,2,function(x)
+      max(unlist(sapply(high, function(y) cor(x,y)))),
+      mc.cores=parallel::detectCores()))
+
+    combined<-cbind(high,low[,low_max<cutoff])
 
     #tmp <- cor(as.matrix(combined))
     #tmp[!upper.tri(tmp)] <- 0
