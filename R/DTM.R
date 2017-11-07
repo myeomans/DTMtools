@@ -32,13 +32,12 @@ DTM<-function(texts,
   }
   #######################################################
   if(POS){
-    dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, verbose)
+    dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, sparse, verbose)
   } else {
-    dtm<-ngram_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, verbose)
+    dtm<-ngram_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, sparse, verbose)
   }
   #######################################################
   #if(!TPformat) return(dtm)
-  if ((sparse<1)&!is.na(sparse)) dtm<-dtm[,colMeans(dtm>0)>=(1-sparse)]
   if(!is.null(group.conc)) dtm<-group.max.conc(dtm, group.conc, cutoff=group.conc.cutoff)
   if(!is.null(vocabmatch)) dtm<-DTMmatch(vocabmatch, dtm)
   # #######################################################

@@ -9,6 +9,7 @@ pos_tokens<-function(texts,
                      punct=FALSE,
                      stop.words=TRUE,
                      overlap=1,
+                     sparse=0.99,
                      verbose=FALSE){
 
   ptxt<-read.csv("plan_text.csv",stringsAsFactors = F)
@@ -54,6 +55,7 @@ pos_tokens<-function(texts,
   for (ng in 1:length(ngrams)){
     dgm[[ng]] <- as.matrix(quanteda::dfm(unlist(lapply(pos_words, ngrammer, ngrams[ng])),tolower=F))
     dgm[[ng]]<-dgm[[ng]][,colSums(dgm[[ng]])>1]
+    if ((sparse<1)) dgm<-dgm[,colMeans(dgm>0)>=(1-sparse)]
     if (ng==1) dpm<-dgm[[1]]
     if (ng>1) dpm<-overlaps(dpm, dgm[[ng]], overlap)
 

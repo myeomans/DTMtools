@@ -5,6 +5,7 @@ ngram_tokens<-function(texts,
                        punct=TRUE,
                        stop.words=TRUE,
                        overlap=1,
+                       sparse=0.99,
                        verbose=FALSE){
 
   cleanertext<-unlist(parallel::mclapply(texts, cleantext, language, stop.words, punct,
@@ -17,6 +18,7 @@ ngram_tokens<-function(texts,
                                       mc.cores= parallel::detectCores()))
     dgm[[ng]] <- as.matrix(quanteda::dfm(tokens))
     dgm[[ng]]<-dgm[[ng]][,colSums(dgm[[ng]])>1]
+    if ((sparse<1)) dgm<-dgm[,colMeans(dgm>0)>=(1-sparse)]
     if (ng==1) dtm<-dgm[[1]]
     if (ng>1) dtm<-overlaps(dtm, dgm[[ng]], overlap)
 
