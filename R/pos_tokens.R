@@ -55,7 +55,7 @@ pos_tokens<-function(texts,
   for (ng in 1:length(ngrams)){
     dgm[[ng]] <- as.matrix(quanteda::dfm(unlist(lapply(pos_words, ngrammer, ngrams[ng])),tolower=F))
     dgm[[ng]]<-dgm[[ng]][,colSums(dgm[[ng]])>1]
-    if ((sparse<1)) dgm<-dgm[,colMeans(dgm>0)>=(1-sparse)]
+    if ((sparse<1)) dgm[[ng]]<-dgm[[ng]][,colMeans(dgm[[ng]]>0)>=(1-sparse)]
     if (ng==1) dpm<-dgm[[1]]
     if (ng>1) dpm<-overlaps(dpm, dgm[[ng]], overlap)
 
