@@ -128,11 +128,15 @@ stemexcept<-function(sentence, excepts, language="english"){
 }
 ############################################################################
 overlaps<-function(high, low, cutoff=.9){
-  combined<-Matrix::cBind(high,low)
+
+  #combined<-Matrix::cBind(high,low)
   if(cutoff<1){
-    tmp <- cor(as.matrix(combined))
-    tmp[!upper.tri(tmp)] <- 0
-    combined <- combined[,apply(tmp,2,function(x) all(abs(x) < cutoff))]
+    tmp <- apply(low,2,function(x) apply(high,2, function(y) cor(x,y)))
+    combined<-cbind(high,low[,apply(tmp,2,max)<cutoff])
+
+    #tmp <- cor(as.matrix(combined))
+    #tmp[!upper.tri(tmp)] <- 0
+    #combined <- combined[,apply(tmp,2,function(x) all(abs(x) < cutoff))]
 
     # Should do PMI at some point...
 
