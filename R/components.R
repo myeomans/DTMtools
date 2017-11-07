@@ -129,8 +129,9 @@ stemexcept<-function(sentence, excepts, language="english"){
 ############################################################################
 overlaps<-function(high, low, cutoff=.9){
 
-  #combined<-Matrix::cBind(high,low)
-  if(cutoff<1){
+  if(cutoff==1){
+    combined<-cbind(as.matrix(high),as.matrix(low))
+  } else {
     high<-as.matrix(high)
     low<-as.matrix(low)
     tmp <- apply(low,2,function(x) apply(high,2, function(y) cor(x,y)))
