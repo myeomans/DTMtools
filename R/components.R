@@ -131,6 +131,8 @@ overlaps<-function(high, low, cutoff=.9){
 
   #combined<-Matrix::cBind(high,low)
   if(cutoff<1){
+    high<-as.matrix(high)
+    low<-as.matrix(low)
     tmp <- apply(low,2,function(x) apply(high,2, function(y) cor(x,y)))
     combined<-cbind(high,low[,apply(tmp,2,max)<cutoff])
 
