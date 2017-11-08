@@ -131,7 +131,6 @@ overlaps<-function(high, low, cutoff=.9){
 
   if ((sum(low)==0)(is.na(low))){
     combined<-high
-  }
   }else if((cutoff==1){
     combined<-cbind(as.matrix(high),as.matrix(low))
   } else {
