@@ -20,7 +20,7 @@ ngram_tokens<-function(texts,
     dgm[[ng]]<-dgm[[ng]][,colSums(dgm[[ng]])>1]
     if ((sparse<1)) dgm[[ng]]<-dgm[[ng]][,colMeans(dgm[[ng]]>0)>=(1-sparse)]
     if (ng==1) dtm<-dgm[[1]]
-    if (ng>1) dtm<-overlaps(dtm, dgm[[ng]], overlap)
+    if ((ng>1)&(!is.null(dim(dgm[[ng]])))) dtm<-DTMtools::overlaps(dtm, dgm[[ng]], overlap)
 
     if (verbose) print(paste(c(ng, dim(dtm),dim(dgm[[ng]]))))
   }
