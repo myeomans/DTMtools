@@ -12,17 +12,17 @@ pos_tokens<-function(texts,
                      sparse=0.99,
                      verbose=FALSE){
 
-  ptxt<-read.csv("plan_text.csv",stringsAsFactors = F)
-
-  texts=ptxt$planSPELL[ptxt$anyplans==1][1:1000]
-  wstem="all"
-  ngrams=1
-  language="english"
-  punct=FALSE
-  stop.words=TRUE
-  overlap=1
-  verbose=FALSE
-
+  # ptxt<-read.csv("plan_text.csv",stringsAsFactors = F)
+  #
+  # texts=ptxt$planSPELL[ptxt$anyplans==1][1:1000]
+  # wstem="all"
+  # ngrams=1
+  # language="english"
+  # punct=FALSE
+  # stop.words=TRUE
+  # overlap=1
+  # verbose=FALSE
+  #
 
   texts<-textformat(texts, FALSE)
   texts<-ctxpand(texts)
