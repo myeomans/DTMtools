@@ -1,5 +1,5 @@
-# library(spacyr)
-# spacyr::spacy_initialize(python_executable = "/Users/mikeyeomans/anaconda3/bin/python")
+library(spacyr)
+spacyr::spacy_initialize(python_executable = "/Users/mikeyeomans/anaconda3/bin/python")
 
 ################################################################
 pos_tokens<-function(texts,
@@ -12,17 +12,17 @@ pos_tokens<-function(texts,
                      sparse=0.99,
                      verbose=FALSE){
 
-  # ptxt<-read.csv("plan_text.csv",stringsAsFactors = F)
-  #
-  # texts=ptxt$planSPELL[ptxt$anyplans==1][1:1000]
-  # wstem="all"
-  # ngrams=1
-  # language="english"
-  # punct=FALSE
-  # stop.words=TRUE
-  # overlap=1
-  # verbose=FALSE
-  #
+  ptxt<-read.csv("data/practice_plans.csv",stringsAsFactors = F)
+
+  texts=ptxt$planSPELL[1:100]
+  wstem="all"
+  ngrams=1
+  language="english"
+  punct=FALSE
+  stop.words=TRUE
+  overlap=1
+  verbose=FALSE
+
 
   texts<-textformat(texts, FALSE)
   texts<-ctxpand(texts)
