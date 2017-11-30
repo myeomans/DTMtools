@@ -1,5 +1,3 @@
-library(spacyr)
-spacyr::spacy_initialize(python_executable = "/Users/mikeyeomans/anaconda3/bin/python")
 
 ################################################################
 pos_tokens<-function(texts,
@@ -12,16 +10,7 @@ pos_tokens<-function(texts,
                      sparse=0.99,
                      verbose=FALSE){
 
-  ptxt<-read.csv("data/practice_plans.csv",stringsAsFactors = F)
 
-  texts=ptxt$planSPELL[1:100]
-  wstem="all"
-  ngrams=1
-  language="english"
-  punct=FALSE
-  stop.words=TRUE
-  overlap=1
-  verbose=FALSE
 
 
   texts<-textformat(texts, FALSE)
@@ -44,16 +33,27 @@ pos_tokens<-function(texts,
   }
   ######
 
-
-
   parsedtxt$clean_pos<-paste0(parsedtxt$cleanlemma,"_",parsedtxt$pos)
+
   ######
-  pos_words<-parallel::mclapply(unique(parsedtxt$doc_id),
+  unique_ids <- unique(parsedtxt$doc_id)
+  pos_words<-parallel::mclapply(unique_ids,
                                 function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"clean_pos"]),
                                 mc.cores= parallel::detectCores())
+  # the following garantees that final matrix will be as long as length(texts)
+  names(pos_words) <- unique_ids
+  ids_not_in_unique_ids <- setdiff(names(texts), unique_ids)
+  if(length(ids_not_in_unique_ids)>0){
+    for(s_id in ids_not_in_unique_ids){
+      pos_words[[s_id]] = ""
+    }
+    pos_words <- pos_words[order(names(pos_words))]
+  }
+  #
+
   dgm<-list()
   for (ng in 1:length(ngrams)){
-    dgm[[ng]] <- as.matrix(quanteda::dfm(unlist(lapply(pos_words, ngrammer, ngrams[ng])),tolower=F))
+    dgm[[ng]] <- as.matrix(quanteda::dfm(unlist(lapply(pos_words, ngrammer, ngrams[ng])),tolower=FALSE))
     dgm[[ng]]<-dgm[[ng]][,colSums(dgm[[ng]])>1]
     if ((sparse<1)) dgm[[ng]]<-dgm[[ng]][,colMeans(dgm[[ng]]>0)>=(1-sparse)]
     if (ng==1) dpm<-dgm[[1]]
@@ -62,5 +62,27 @@ pos_tokens<-function(texts,
     if (verbose) print(paste(c(ng, dim(dpm),dim(dgm[[ng]]))))
   }
   dpm<-doublestacker(dpm)
+
+  # make sure that tokens with only one POS dont have pos tag
+  col_names <- colnames(dpm)
+  colnames(dpm) <- remove_redundant_pos_tags(col_names)
+
+
+  #
+
   return(dpm)
+}
+
+remove_redundant_pos_tags <- function(col_names){
+  df_col_names <- data.frame(orig_name = col_names,stringsAsFactors = FALSE)
+  df_col_names$token = gsub("_[A-Z]+$","",df_col_names$orig_name)
+  df_col_names$pos = gsub("^.*_","",df_col_names$orig_name)
+
+  df_count_lemma_by_pos <- aggregate(df_col_names$pos, by=df_col_names["token"], FUN=length)
+  multi_pos_lemmas <- df_count_lemma_by_pos[df_count_lemma_by_pos$x>1 , "token"]
+
+  df_col_names$final_name = ifelse(df_col_names$token %in% multi_pos_lemmas,
+                                   df_col_names$orig_name,
+                                   df_col_names$token)
+  return(df_col_names$final_name)
 }
