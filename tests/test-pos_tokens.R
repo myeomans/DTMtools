@@ -22,14 +22,14 @@ verbose=FALSE
 sparse=0.99
 
 debug(pos_tokens)
-#undebug(pos_tokens)
+undebug(pos_tokens)
 length(texts)
 m_out <- pos_tokens(texts=texts)
 nrow(m_out)
 
 v_s_names <- colnames(m_out)
 v_s_names <- v_s_names[order(v_s_names)]
-
+v_s_names
 
 apply(m_out, sum,MARGIN = 1)
 
