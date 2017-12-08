@@ -13,18 +13,18 @@ texts=ptxt$planSPELL[1:100]
 texts = c("",texts)
 texts[20] = ""
 wstem="all"
-ngrams=1
 language="english"
 punct=FALSE
 stop.words=TRUE
 overlap=1
 verbose=FALSE
 sparse=0.99
+include_word_dependency=TRUE
 
 debug(pos_tokens)
 undebug(pos_tokens)
 length(texts)
-m_out <- pos_tokens(texts=texts)
+m_out <- pos_tokens(texts=texts, sparse=0.99, include_word_dependency=TRUE)
 nrow(m_out)
 
 v_s_names <- colnames(m_out)
