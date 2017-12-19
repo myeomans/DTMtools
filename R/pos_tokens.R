@@ -66,8 +66,8 @@ pos_tokens<-function(texts,
   }
 
   ## remove for loop and overaps and doubletacker
-  dgm<-list()
-  dpm <- as.matrix(quanteda::dfm(unlist(lapply(pos_words, ngrammer, ngrams[ng])),tolower=FALSE))
+
+  dpm <- as.matrix(quanteda::dfm(unlist(lapply(pos_words, ngrammer, 1)),tolower=FALSE))
   dpm <- dpm[,colSums(dpm)>1]
   if ((sparse<1)) dpm<-dpm[,colMeans(dpm>0)>=(1-sparse)]
 
