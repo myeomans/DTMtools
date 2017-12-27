@@ -24,14 +24,17 @@ include_word_dependency=TRUE
 debug(pos_tokens)
 undebug(pos_tokens)
 length(texts)
+
+texts <- texts[1:3]
 m_out <- pos_tokens(texts=texts, sparse=0.99, include_word_dependency=TRUE)
 nrow(m_out)
 
-v_s_names <- colnames(m_out)
-v_s_names <- v_s_names[order(v_s_names)]
-v_s_names
 
-apply(m_out, sum,MARGIN = 1)
+rowSums(m_out)
+
+dt_tokens <- data.table(m_out)
+dt_tokens[ , texts := texts]
+#View(dt_tokens)
 
 data("phone_offers")
 texts <- phone_offers$message
