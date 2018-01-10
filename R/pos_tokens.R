@@ -35,7 +35,7 @@ pos_tokens <- function(texts,
   dt_parsedtxt[ , clean_pos:= paste0(cleanlemma,"_",pos)]
 
   if(include_word_dependency){
-    dt_parsedtxt <- word_dependency_parser_temp(dt_parsedtxt)
+    dt_parsedtxt <- word_dependency_parser(dt_parsedtxt)
     dt_clean_pos_by_id <- dt_parsedtxt[ , .(l_clean_pos = list(c(clean_pos,parses[!is.na(parses)]))), by = "doc_id"]
 
   } else {
