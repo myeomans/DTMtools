@@ -24,11 +24,11 @@ cleantext<-function(text, language="english", stop.words=TRUE, punct=FALSE, nums
 }
 ############################################################################
 textformat<-function(text, punct=FALSE){
-  text<-sapply(text, function(x) gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", x))
-  text<-sapply(text, function(x) gsub("www.(.*)[.][a-z]+", "", x))
-  text<-sapply(text, function(x) gsub("”", "\"", x))
-  text<-sapply(text, function(x) gsub("“", "\"", x))
-  text<-sapply(text, function(x) gsub("’", "\'", x))
+  text <- gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", text)
+  text <- gsub("www.(.*)[.][a-z]+", "", text)
+  text <- gsub("”", "\"", text)
+  text <- gsub("“", "\"", text)
+  text <- gsub("’", "\'", text)
 
   text<-gsub("ha ha"," haha ",text,fixed=T)
   text<-gsub("lol "," haha ",text,fixed=T)
@@ -62,27 +62,28 @@ textformat<-function(text, punct=FALSE){
 }
 
 ctxpand<-function(text){
-  text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=T))
-  text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=T))
-  text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("can't", "cannot", x, fixed=T))
-  text<-sapply(text, function(x) gsub("Let's", "Let us", x, fixed=T))
-  text<-sapply(text, function(x) gsub("I'm", "I am", x, fixed=T))
-  text<-sapply(text, function(x) gsub("Won't", "Will not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("Can't", "Cannot", x, fixed=T))
-  text<-sapply(text, function(x) gsub("shan't", "shall not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'d", " would", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'ve", " have", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'s", " is", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'ll", " will", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'re", " are", x, fixed=T))
-  text<-sapply(text, function(x) gsub("n't", " not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("u.s.", "US", x, fixed=T))
-  text<-sapply(text, function(x) gsub("U.S.", "US", x, fixed=T))
-  text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=T))
-  text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=T))
+  text <- gsub("let's", "let us", text, fixed=T)
+  text <- gsub("i'm", "i am", text, fixed=T)
+  text <- gsub("won't", "will not", text, fixed=T)
+  text <- gsub("can't", "cannot", text, fixed=T)
+  text <- gsub("Let's", "Let us", text, fixed=T)
+  text <- gsub("I'm", "I am", text, fixed=T)
+  text <- gsub("Won't", "Will not", text, fixed=T)
+  text <- gsub("Can't", "Cannot", text, fixed=T)
+  text <- gsub("shan't", "shall not", text, fixed=T)
+  text <- gsub("'d", " would", text, fixed=T)
+  text <- gsub("'ve", " have", text, fixed=T)
+  text <- gsub("'s", " is", text, fixed=T)
+  text <- gsub("'ll", " will", text, fixed=T)
+  text <- gsub("'re", " are", text, fixed=T)
+  text <- gsub("n't", " not", text, fixed=T)
+  text <- gsub("u.s.", "US", text, fixed=T)
+  text <- gsub("U.S.", "US", text, fixed=T)
+  text <- gsub("e.g.", "eg", text, fixed=T)
+  text <- gsub("i.e.", "ie", text, fixed=T)
 
-  return(text)}
+  return(text)
+}
 ############################################################################
 gramstem<-function(text, wstem="all", ngrams=1, language="english"){
   if(nchar(text)%in%c(NA,NULL,0:2)){
