@@ -1,4 +1,9 @@
-ngram_tokens<-function(texts,
+#' Ngram Tagger
+#' @description Tally bag-of-words ngram features
+#' @param texts a character vector of texts.
+#' @return a matrix of feature counts
+#' @import data.table
+ngramTokens<-function(texts,
                        wstem="all",
                        ngrams=1,
                        language="english",

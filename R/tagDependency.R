@@ -6,12 +6,12 @@ utils::globalVariables(c("dep_rel","head_token",
                          "token_id","token", "."))
 
 
-#' Word Dependency Parser
-#' @description Return POS tags from natural language.
+#' Dependency Tagger
+#' @description Return dependency tags from natural language.
 #' @param txt a character vector of texts.
-#' @return list of compiled POS-tagged items.
+#' @return list of dependency-tagged items.
 #' @import data.table
-word_dependency_parser <-function(dt_parsedtxt){
+tagDependency <-function(dt_parsedtxt){
 
   dt_head_token <- dt_parsedtxt[ , .(doc_id, sentence_id, token_id,token)]
   setnames(dt_head_token, c("token_id","token"), c("head_token_id","head_token"))
@@ -19,12 +19,9 @@ word_dependency_parser <-function(dt_parsedtxt){
   setkeyv(dt_head_token, v_s_keys)
   setkeyv(dt_parsedtxt, v_s_keys)
   dt_parsedtxt <- dt_head_token[dt_parsedtxt] # left merge on dt_parsedtxt
-  dt_parsedtxt[dep_rel=="ROOT" , head_token := "ROOT" ]
-  dt_parsedtxt[dep_rel=="ROOT" , head_token_id := 0 ]
-  dt_parsedtxt[ , parses := ifelse(is.na(head_token), NA_character_,
-                                   paste0(toupper(dep_rel), "_",head_token,"_",token))]
+  dt_parsedtxt[ , parses := ifelse(is.na(head_token)|(dep_rel=="ROOT"), NA_character_,
+                                   paste0(toupper(dep_rel), "_",tolower(head_token),"_",cleanlemma))]
 
   return(dt_parsedtxt)
-
 }
 

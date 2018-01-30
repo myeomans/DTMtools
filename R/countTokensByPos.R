@@ -10,7 +10,7 @@ countTokensByPos <- function(texts, ... ){ #=> list
   texts <- iconv(texts,to="ASCII",sub=" ")
   len_text <- length(texts)
 
-  m_pos_token_one_hot <- pos_tokens(texts, ...)
+  m_pos_token_one_hot <- posTokens(texts, ...)
 
   dt_token_one_hot <- data.table(m_pos_token_one_hot)
 

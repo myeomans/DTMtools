@@ -1,15 +1,10 @@
-library(politeness)
 library(DTMtools)
 library(data.table)
 library(quanteda)
 
-PYTHON_PATH <- "/Users/alejandrokantor/anaconda2/bin/python"
-spacyr::spacy_initialize(python_executable = PYTHON_PATH)
+data("phone_offers")
 
-
-ptxt<-read.csv("data/practice_plans.csv",stringsAsFactors = F)
-
-texts=ptxt$planSPELL[1:100]
+texts=phone_offers$message[1:100]
 texts = c("",texts)
 texts[20] = ""
 wstem="all"
@@ -19,14 +14,14 @@ stop.words=TRUE
 overlap=1
 verbose=FALSE
 sparse=0.99
-include_word_dependency=TRUE
+dependency=TRUE
 
-debug(pos_tokens)
-undebug(pos_tokens)
+debug(posTokens)
+undebug(posTokens)
 length(texts)
 
 texts <- texts[1:3]
-m_out <- pos_tokens(texts=texts, sparse=0.99, include_word_dependency=TRUE)
+m_out <- posTokens(texts=texts, sparse=0.99, dependency=TRUE)
 nrow(m_out)
 
 
@@ -44,7 +39,7 @@ df_token_pos_text <- l_token_pos$df_token_pos_text
 df_token_multiple_pos <- l_token_pos$df_token_multiple_pos
 df_token_multiple_pos <- l_token_pos$df_token_single_pos
 
-View(df_token_multiple_pos)
+#View(df_token_multiple_pos)
 lookUpTokenPos(df_token_pos_text, s_token_pos = "much_ADJ")
 
 

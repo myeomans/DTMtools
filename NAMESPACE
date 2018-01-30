@@ -1,2 +1,4 @@
 exportPattern("^[[:alpha:]]+")
 import(data.table)
+importFrom("graphics", "text")
+importFrom("stats", "cor")

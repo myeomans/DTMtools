@@ -1,6 +1,8 @@
-############################################################################
-# THE BIG WRAPPER FUNCTION
-############################################################################
+#' Document Term Matricizer
+#' @description Turns text into data.
+#' @param texts a character vector of texts.
+#' @param TPformat logical - return in stm::textProcessor() format?
+#' @return Feature counts, as a matrix (or in stm format)
 DTM<-function(texts,
               sparse=0.99,
               wstem="all",
@@ -8,8 +10,9 @@ DTM<-function(texts,
               language="english",
               vocabmatch=NULL,
               stop.words=TRUE,
-              POS=FALSE,
               punct=FALSE,
+              POS=FALSE,
+              dependency=FALSE,
               overlap=.8,
               group.conc=NULL,
               group.conc.cutoff=0.8,
@@ -32,12 +35,27 @@ DTM<-function(texts,
   }
   #######################################################
   if(POS){
-    dtm<-pos_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, sparse, verbose)
+    dtm<-posTokens(texts=texts,
+                   #ngrams=ngrams,
+                   language=language,
+                   punct=punct,
+                   stop.words=stop.words,
+                   overlap=overlap,
+                   sparse=sparse,
+                   dependency=dependency,
+                   verbose=verbose)
   } else {
-    dtm<-ngram_tokens(texts,wstem,ngrams,language,punct,stop.words, overlap, sparse, verbose)
+    dtm<-ngramTokens(texts=texts,
+                     wstem=wstem,
+                     ngrams=ngrams,
+                     language=language,
+                     punct=punct,
+                     stop.words=stop.words,
+                     overlap=overlap,
+                     sparse=sparse,
+                     verbose=verbose)
   }
   #######################################################
-  #if(!TPformat) return(dtm)
   if(!is.null(group.conc)) dtm<-group.max.conc(dtm, group.conc, cutoff=group.conc.cutoff)
   if(!is.null(vocabmatch)) dtm<-DTMmatch(vocabmatch, dtm)
   # #######################################################

@@ -26,9 +26,9 @@ cleantext<-function(text, language="english", stop.words=TRUE, punct=FALSE, nums
 textformat<-function(text, punct=FALSE){
   text <- gsub(" ?(f|ht)tp(s?)://(.*)[.][a-z]+", "", text)
   text <- gsub("www.(.*)[.][a-z]+", "", text)
-  text <- gsub("”", "\"", text)
-  text <- gsub("“", "\"", text)
-  text <- gsub("’", "\'", text)
+  text <- gsub("\u201D", "\"", text)
+  text <- gsub("\u201C", "\"", text)
+  text <- gsub("\u2019", "\'", text)
 
   text<-gsub("ha ha"," haha ",text,fixed=T)
   text<-gsub("lol "," haha ",text,fixed=T)
@@ -173,5 +173,21 @@ group.max.conc<-function(dtm,groups, cutoff=0.8){
   return(dtm[,max.conc<cutoff])
   #return(list(conc=max.conc,
   #            cts=cts))
+}
+############################################################################
+
+############################################################################
+# FIT OUT-OF-SAMPLE TEXT TO TRAINING FEATURES
+############################################################################
+DTMmatch<-function(hole, peg){
+  #peg<-doublestacker(peg)
+  newpeg<-array(0, c(nrow(peg), ncol(hole)))
+  for (i in 1:ncol(newpeg)){
+    if(colnames(hole)[i] %in% colnames(peg)){
+      newpeg[,i]<-peg[,which(colnames(peg)==colnames(hole)[i])]
+    }
+  }
+  dimnames(newpeg)<-list(rownames(peg), colnames(hole))
+  return(as.matrix(newpeg))
 }
 ############################################################################
