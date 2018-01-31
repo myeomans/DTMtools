@@ -50,6 +50,8 @@ posTokens <- function(texts,
   l_pos_words <- l_pos_words[orig_unique_ids]
   names(l_pos_words) <- orig_unique_ids
 
+  # Must resolve this here!!!
+
   #l_pos_words <- dropRedundantTags(l_pos_words)
 
   dgm<-list()
@@ -63,14 +65,6 @@ posTokens <- function(texts,
 
     if (verbose) print(paste(c(ng, dim(dpm),dim(dgm[[ng]]))))
   }
-
-  dpm <- dpm[,colSums(dpm)>1]
-  if ((sparse<1)) dpm<-dpm[,colMeans(dpm>0)>=(1-sparse)]
-
-  # make sure that tokens with only one POS dont have pos tag
-  col_names <- colnames(dpm)
-
-
   return(dpm)
 }
 
