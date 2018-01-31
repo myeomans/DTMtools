@@ -36,7 +36,7 @@ DTM<-function(texts,
   #######################################################
   if(POS){
     dtm<-posTokens(texts=texts,
-                   #ngrams=ngrams,
+                   ngrams=ngrams,
                    language=language,
                    punct=punct,
                    stop.words=stop.words,

@@ -1,4 +1,5 @@
-dropRedundantTags <- function(col_names){
+dropRedundantTags <- function(pos_lists){
+  uniques<-
   v_s_allowed_pos <- c("NOUN", "VERB" , "ADV" , "DET" ,"ADJ", "PROPN" , "NUM", "ADP", "CCONJ"  )
   dt_col_names <- data.table(orig_name = col_names)
   dt_col_names[ , token := gsub("_[A-Z]+$","",orig_name)]
@@ -12,5 +13,7 @@ dropRedundantTags <- function(col_names){
   dt_col_names[ , final_name := ifelse(token %in% multi_pos_lemmas,
                                        orig_name,
                                        token)]
+
+  subbed_lists<-lapply(pos_lists,function(x) x)
   return(dt_col_names$final_name)
 }
