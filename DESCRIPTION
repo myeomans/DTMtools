@@ -15,5 +15,7 @@ Imports:
     quanteda,
     parallel,
     spacyr,
+    plyr,
+    tidyverse,
     SnowballC,
     data.table

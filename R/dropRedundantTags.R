@@ -1,19 +1,23 @@
-dropRedundantTags <- function(pos_lists){
-  uniques<-
-  v_s_allowed_pos <- c("NOUN", "VERB" , "ADV" , "DET" ,"ADJ", "PROPN" , "NUM", "ADP", "CCONJ"  )
-  dt_col_names <- data.table(orig_name = col_names)
-  dt_col_names[ , token := gsub("_[A-Z]+$","",orig_name)]
-  dt_col_names[ , pos := gsub("^.*_","",orig_name)]
-  dt_col_names[ ! pos %in% v_s_allowed_pos, pos:= ""]
 
-  dt_token_pos <- unique(dt_col_names[ , .(token,pos)])
-  dt_count_lemma_by_pos <- dt_token_pos[ , count := length(pos), by=.(token)]
-  multi_pos_lemmas <- dt_count_lemma_by_pos[count>1 , unique(token)]
-
-  dt_col_names[ , final_name := ifelse(token %in% multi_pos_lemmas,
-                                       orig_name,
-                                       token)]
-
-  subbed_lists<-lapply(pos_lists,function(x) x)
-  return(dt_col_names$final_name)
+#' @import tidyverse
+dropRedundantTags <- function(pos_lists, sparse=0.99){
+  pos_lists<-l_pos_words
+  sparse=0.99
+  dt_pos <- tibble(raw = (unlist(pos_lists))) %>%
+    mutate(token = gsub("_[A-Z]+$","",raw)) %>%
+    mutate(pos = gsub("^.*_","",raw)) %>%
+    group_by(raw) %>%
+    summarize(count=n(), token=first(token),pos=first(pos))
+  dt_keepers<- dt_pos %>%
+    filter(count>length(pos_lists)*(1-sparse)) %>%
+    filter(token%in%(token[duplicated(token)]))
+  dt_switchers<-dt_pos[!dt_pos$raw%in%dt_keepers$raw,]
+  subbed_lists<-lapply(pos_lists, function(x) unlist(plyr::mapvalues(x,
+                                                                     dt_switchers$raw,
+                                                                     dt_switchers$token,
+                                                                     warn_missing=F)))
+  return(subbed_lists)
 }
+
+
+

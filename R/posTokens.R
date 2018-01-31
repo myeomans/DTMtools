@@ -27,6 +27,8 @@ posTokens <- function(texts,
   dt_parsedtxt[cleanlemma=="-PRON-" , cleanlemma := token]
   dt_parsedtxt[,cleanlemma := tolower(cleanlemma)]
   dt_parsedtxt <-  dt_parsedtxt[!grepl("^\\s*$",cleanlemma)]
+  dt_parsedtxt[cleanlemma=="?" , cleanlemma := "qmark"]
+  dt_parsedtxt[cleanlemma=="!" , cleanlemma := "xmark"]
   ######
   if(is.character(stop.words)){
     dt_parsedtxt <- dt_parsedtxt[! cleanlemma %in% stop.words]
@@ -50,7 +52,7 @@ posTokens <- function(texts,
   l_pos_words <- l_pos_words[orig_unique_ids]
   names(l_pos_words) <- orig_unique_ids
 
-  #l_pos_words <- dropRedundantTags(l_pos_words)
+  l_pos_words <- dropRedundantTags(l_pos_words, sparse=sparse)
 
   dgm<-list()
   for (ng in 1:length(ngrams)){
@@ -63,19 +65,5 @@ posTokens <- function(texts,
 
     if (verbose) print(paste(c(ng, dim(dpm),dim(dgm[[ng]]))))
   }
-
-  dpm <- dpm[,colSums(dpm)>1]
-  if ((sparse<1)) dpm<-dpm[,colMeans(dpm>0)>=(1-sparse)]
-
-  # make sure that tokens with only one POS dont have pos tag
-  col_names <- colnames(dpm)
-
-
   return(dpm)
 }
-
-a=c(3,6)
-b=c(11,12)
-cc=rep(1:10,2)
-for(i in seq_along(a)) cc <- gsub(a[i], b[i], cc, fixed = TRUE)
-

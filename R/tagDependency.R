@@ -20,7 +20,7 @@ tagDependency <-function(dt_parsedtxt){
   setkeyv(dt_parsedtxt, v_s_keys)
   dt_parsedtxt <- dt_head_token[dt_parsedtxt] # left merge on dt_parsedtxt
   dt_parsedtxt[ , parses := ifelse(is.na(head_token)|(dep_rel=="ROOT"), NA_character_,
-                                   paste0(toupper(dep_rel), "_",tolower(head_token),"_",cleanlemma))]
+                                   paste0(toupper(dep_rel),"_",cleanlemma,"_",tolower(head_token)))]
 
   return(dt_parsedtxt)
 }
