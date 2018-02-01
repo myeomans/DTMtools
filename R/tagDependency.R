@@ -12,7 +12,7 @@ utils::globalVariables(c("dep_rel","head_token",
 #' @return list of dependency-tagged items.
 #' @import data.table
 tagDependency <-function(dt_parsedtxt){
-
+  dt_parsedtxt <- dt_parsedtxt[! pos %in% c("PUNCT","SPACE","SYM")]
   dt_head_token <- dt_parsedtxt[ , .(doc_id, sentence_id, token_id,token)]
   setnames(dt_head_token, c("token_id","token"), c("head_token_id","head_token"))
   v_s_keys <-  c("doc_id", "sentence_id", "head_token_id" )
