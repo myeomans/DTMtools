@@ -5,7 +5,7 @@
 #' @importFrom magrittr %>%
 #' @import dplyr
 dropRedundantTags <- function(pos_lists, sparse=0.99){
-  dt_pos <- tibble(raw = (unlist(pos_lists))) %>%
+  dt_pos <- data.frame(raw = (unlist(pos_lists))) %>%
     mutate(token = gsub("_[A-Z]+$","",raw)) %>%
     mutate(pos = gsub("^.*_","",raw)) %>%
     group_by(raw) %>%
