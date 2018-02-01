@@ -1,5 +1,9 @@
-
+#' Tag Dropper
+#' @description Drop redundant parses
+#' @param texts a list of character vectors
+#' @return a list of character vectors
 #' @import tidyverse
+#' @import magrittr
 dropRedundantTags <- function(pos_lists, sparse=0.99){
   dt_pos <- tibble(raw = (unlist(pos_lists))) %>%
     mutate(token = gsub("_[A-Z]+$","",raw)) %>%
