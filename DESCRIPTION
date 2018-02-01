@@ -16,6 +16,6 @@ Imports:
     parallel,
     spacyr,
     plyr,
-    tidyverse,
+    dplyr,
     SnowballC,
     data.table
