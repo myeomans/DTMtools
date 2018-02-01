@@ -15,7 +15,8 @@ posTokens <- function(texts,
 
   names(texts) <- 1:length(texts)
   texts[texts==""] <- " "
-  parsedtxt <- spacyr::spacy_parse(texts, dependency=T,lemma=T,pos=T,tag=T,entity=F)
+  parsedtxt <- spacyr::spacy_parse(texts, dependency=dependency,
+                                   lemma=T,pos=T,tag=T,entity=F)
   dt_parsedtxt <- data.table::data.table(parsedtxt)
   if(punct){
     dt_parsedtxt <- dt_parsedtxt[(! pos %in% c("PUNCT","SPACE","SYM"))|(lemma %in% c("!","?"))]
@@ -37,14 +38,8 @@ posTokens <- function(texts,
   }
   ######
   dt_parsedtxt[ , clean_pos:= paste0(cleanlemma,"_",pos)]
+  dt_clean_pos_by_id <- dt_parsedtxt[ , .(l_clean_pos = list(clean_pos)), by = "doc_id"]
 
-  if(dependency){
-    dt_parsedtxt <- tagDependency(dt_parsedtxt)
-    dt_clean_pos_by_id <- dt_parsedtxt[ , .(l_clean_pos = list(c(clean_pos,parses[!is.na(parses)]))), by = "doc_id"]
-
-  } else {
-    dt_clean_pos_by_id <- dt_parsedtxt[ , .(l_clean_pos = list(clean_pos)), by = "doc_id"]
-  }
   l_pos_words <- dt_clean_pos_by_id[,l_clean_pos]
   names(l_pos_words) <- dt_clean_pos_by_id[ , as.character(doc_id)]
 
@@ -64,6 +59,13 @@ posTokens <- function(texts,
     if ((ng>1)&(!is.null(dim(dgm[[ng]])))) dpm<-DTMtools::overlaps(dpm, dgm[[ng]], overlap)
 
     if (verbose) print(paste(c(ng, dim(dpm),dim(dgm[[ng]]))))
+  }
+  if(dependency){
+    dt_parsedtxt <- tagDependency(dt_parsedtxt)
+    l_parses <- dt_parsedtxt[ , .(l_clean_pos = list(parses[!is.na(parses)])), by = "doc_id"]
+    depm<-as.matrix(quanteda::dfm(unlist(lapply(l_parses, ngrammer, 1)),tolower=FALSE))
+    if ((sparse<1)) depm<-depm[,colMeans(depm>0)>=(1-sparse)]
+    dpm<-cbind(depm,dpm)
   }
   return(dpm)
 }
