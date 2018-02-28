@@ -23,7 +23,7 @@ posTokens <- function(texts,
 #   stop.words=TRUE
 #   overlap=1
 #   sparse=0.99
-#   dependency=FALSE
+#   dependency=T
 #   tag.sub=1
 #   verbose=FALSE
 
@@ -86,7 +86,10 @@ posTokens <- function(texts,
   }
   if(dependency){
     dt_parsedtxt <- tagDependency(dt_parsedtxt)
-    l_parses <- dt_parsedtxt[ , .(l_clean_pos = list(parses[!is.na(parses)])), by = "doc_id"]
+    dt_parse_by_id <- dt_parsedtxt[ , .(l_parses = list(parses[!is.na(parses)])), by = "doc_id"]
+    l_parses <- dt_parse_by_id[,l_parses]
+    names(l_parses) <- dt_parse_by_id[ , as.character(doc_id)]
+
     depm<-as.matrix(quanteda::dfm(unlist(lapply(l_parses, ngrammer, 1)),tolower=FALSE))
     if ((sparse<1)) depm<-depm[,colMeans(depm>0)>=(1-sparse)]
     dpm<-cbind(depm,dpm)
