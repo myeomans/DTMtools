@@ -134,8 +134,8 @@ overlaps<-function(high, low, cutoff=.9){
   } else {
     high<-as.matrix(high)
     low_l<-lapply(colnames(low),function(x)as.vector(low[,x]))
-    low_max <- unlist(parallel::mclapply(low_l,function(x) max(unlist(apply(high, 2, function(y) cor(x,y)))), mc.cores=parallel::detectCores()))
-    combined<-cbind(high,low[,low_max<cutoff])
+    #low_max <- unlist(parallel::mclapply(low_l,function(x) max(unlist(apply(high, 2, function(y) cor(x,y)))), mc.cores=parallel::detectCores()))
+    #combined<-cbind(high,low[,low_max<cutoff])
 
     #tmp <- cor(as.matrix(combined))
     #tmp[!upper.tri(tmp)] <- 0
@@ -143,9 +143,9 @@ overlaps<-function(high, low, cutoff=.9){
 
     # Should do PMI at some point...
 
-    # peaks<-apply(high, 2, function(x) max(apply(low, 2, function(y) cosdist(x, y))))
-    # remaining<-high[,peaks<=cutoff]
-    # combined<-Matrix::cBind(remaining,low)
+    peaks<-apply(low_l, 2, function(x) max(apply(high, 2, function(y) cosdist(x, y))))
+    remaining<-low_l[,peaks<=cutoff]
+    combined<-Matrix::cBind(remaining,high)
   }
   return(combined)
 }

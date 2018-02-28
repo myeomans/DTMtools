@@ -11,7 +11,21 @@ posTokens <- function(texts,
                       overlap=1,
                       sparse=0.99,
                       dependency=FALSE,
+                      tag.sub=0,
                       verbose=FALSE){
+  if(!((tag.sub>=0)&(tag.sub<=1))) tag.sub<-0
+#
+#   data("phone_offers")
+#   texts=phone_offers$message
+#   ngrams=1
+#   language="english"
+#   punct=T
+#   stop.words=TRUE
+#   overlap=1
+#   sparse=0.99
+#   dependency=FALSE
+#   tag.sub=1
+#   verbose=FALSE
 
   names(texts) <- 1:length(texts)
   texts[texts==""] <- " "
@@ -37,8 +51,16 @@ posTokens <- function(texts,
     dt_parsedtxt <- dt_parsedtxt[! cleanlemma %in% tm::stopwords(language)]
   }
   ######
-  dt_parsedtxt[ , clean_pos:= paste0(cleanlemma,"_",pos)]
-  dt_clean_pos_by_id <- dt_parsedtxt[ , .(l_clean_pos = list(clean_pos)), by = "doc_id"]
+
+  if (tag.sub==1){
+    dt_clean_pos_by_id <- dt_parsedtxt[ , .(l_clean_pos = list(pos)), by = "doc_id"]
+  } else if (tag.sub==0){
+    dt_parsedtxt[ , clean_pos:= paste0(cleanlemma,"_",pos)]
+    dt_clean_pos_by_id <- dt_parsedtxt[ , .(l_clean_pos = list(clean_pos)), by = "doc_id"]
+  } else {
+    stop("not supported")
+  }
+
 
   l_pos_words <- dt_clean_pos_by_id[,l_clean_pos]
   names(l_pos_words) <- dt_clean_pos_by_id[ , as.character(doc_id)]
@@ -47,7 +69,9 @@ posTokens <- function(texts,
   l_pos_words <- l_pos_words[orig_unique_ids]
   names(l_pos_words) <- orig_unique_ids
 
-  l_pos_words <- dropRedundantTags(l_pos_words, sparse=sparse)
+  if(tag.sub==0){
+    l_pos_words <- dropRedundantTags(l_pos_words, sparse=sparse)
+  }
 
   dgm<-list()
   for (ng in 1:length(ngrams)){
