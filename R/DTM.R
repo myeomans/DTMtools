@@ -35,7 +35,7 @@ DTM<-function(texts,
     }
   }
   #######################################################
-  if(POS|tag.sub==1){
+  if(POS|dependency|tag.sub==1){
     dtm<-posTokens(texts=texts,
                    ngrams=ngrams,
                    language=language,
