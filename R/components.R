@@ -133,7 +133,8 @@ overlaps<-function(high, low, cutoff=.9){
     combined<-cbind(as.matrix(high),as.matrix(low))
   } else {
     high<-as.matrix(high)
-    low_l<-lapply(colnames(low),function(x)as.vector(low[,x]))
+    low_l<-data.frame(lapply(colnames(low),function(x) as.vector(low[,x])))
+    colnames(low_l)<-colnames(low)
     #low_max <- unlist(parallel::mclapply(low_l,function(x) max(unlist(apply(high, 2, function(y) cor(x,y)))), mc.cores=parallel::detectCores()))
     #combined<-cbind(high,low[,low_max<cutoff])
 
@@ -149,6 +150,8 @@ overlaps<-function(high, low, cutoff=.9){
   }
   return(combined)
 }
+
+cosdist<-function(x,y) return(x %*% y / sqrt(x%*%x * y%*%y))
 ############################################################################
 doublestacker<-function (wdcts){
   wdcts<-as.matrix(wdcts)
