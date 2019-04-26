@@ -146,7 +146,7 @@ overlaps<-function(high, low, cutoff=.9){
 
     peaks<-apply(low_l, 2, function(x) max(apply(high, 2, function(y) cosdist(x, y))))
     remaining<-low_l[,peaks<=cutoff]
-    combined<-Matrix::cBind(remaining,high)
+    combined<-cbind(remaining,high)
   }
   return(combined)
 }
