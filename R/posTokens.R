@@ -47,7 +47,7 @@ posTokens <- function(texts,
   ######
   if(is.character(stop.words)){
     dt_parsedtxt <- dt_parsedtxt[! cleanlemma %in% stop.words]
-  } else if(stop.words){
+  } else if(!stop.words){
     dt_parsedtxt <- dt_parsedtxt[! cleanlemma %in% tm::stopwords(language)]
   }
   ######

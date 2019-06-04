@@ -14,7 +14,7 @@ cleantext<-function(text, language="english", stop.words=TRUE, punct=FALSE, nums
   #DELETES STOP WORDS
   if((length(stop.words)>1)&(!pos_tag)){
     text<-tm::removeWords(text, stop.words)
-  }else if((stop.words)&(!pos_tag)){
+  }else if((!stop.words)&(!pos_tag)){
     text<-tm::removeWords(text, tm::stopwords(language))
   }
   #DELETES NUMBERS
