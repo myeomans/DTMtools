@@ -1,7 +1,21 @@
 #' Document Term Matricizer
 #' @description Turns text into data.
 #' @param texts a character vector of texts.
+#' @param sparse maximum feature sparsity for inclusion (1 = include all features)
+#' @param wstem character what words should be stemmed?
+#' @param ngrams numeric vector of ngram sizes (max = 1:3)
+#' @param language character
+#' @param vocabmatch matrix
+#' @param stop.words logical should stop words be included? default is TRUE
+#' @param punct logical should exclamation points and question marks be included as features?
+#' @param POS logical should
+#' @param dependency logical should
+#' @param tag.sub numeric what
+#' @param overlap numeric what
+#' @param group.conc character group IDs for
+#' @param group.conc.cutoff numeric
 #' @param TPformat logical - return in stm::textProcessor() format?
+#' @param verbose logical - report interim steps during processing
 #' @return Feature counts, as a matrix (or in stm format)
 DTM<-function(texts,
               sparse=0.99,
@@ -35,7 +49,7 @@ DTM<-function(texts,
     }
   }
   #######################################################
-  if(POS|dependency|tag.sub==1){
+  if(POS|dependency|tag.sub>0){
     dtm<-posTokens(texts=texts,
                    ngrams=ngrams,
                    language=language,
