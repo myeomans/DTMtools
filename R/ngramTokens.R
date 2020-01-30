@@ -1,6 +1,14 @@
 #' Ngram Tagger
 #' @description Tally bag-of-words ngram features
 #' @param texts a character vector of texts.
+#' @param wstem character what words should be stemmed?
+#' @param ngrams numeric vector of ngram sizes (max = 1:3)
+#' @param language character what language are you parsing?
+#' @param punct logical should exclamation points and question marks be included as features?
+#' @param stop.words logical should stop words be included? default is TRUE
+#' @param overlap numeric How dissimilar (in cossine distance) must an ngram be from all (n-1)grams to be added to feature set?
+#' @param sparse maximum feature sparsity for inclusion (1 = include all features)
+#' @param verbose logical - report interim steps during processing
 #' @return a matrix of feature counts
 #' @import data.table
 ngramTokens<-function(texts,

@@ -26,7 +26,35 @@ DTM(
 \arguments{
 \item{texts}{a character vector of texts.}
 
+\item{sparse}{maximum feature sparsity for inclusion (1 = include all features)}
+
+\item{wstem}{character what words should be stemmed?}
+
+\item{ngrams}{numeric vector of ngram sizes (max = 1:3)}
+
+\item{language}{character what language are you parsing?}
+
+\item{vocabmatch}{matrix used to create a new matrix with features that are identical to a previous one}
+
+\item{stop.words}{logical should stop words be included? default is TRUE}
+
+\item{punct}{logical should exclamation points and question marks be included as features?}
+
+\item{POS}{logical should features have part of speech tags appended? default is FALSE}
+
+\item{dependency}{logical should features have dependency relations appended? default is FALSE}
+
+\item{tag.sub}{numeric what fraction of features should be replaced by POS tags? default is 0 (no features), fractions not supported yet.}
+
+\item{overlap}{numeric How dissimilar (in cossine distance) must an ngram be from all (n-1)grams to be added to feature set?}
+
+\item{group.conc}{character group IDs for removing group-specific words}
+
+\item{group.conc.cutoff}{numeric threshold for group-specificity of words, as proportion of occurences in the main group.}
+
 \item{TPformat}{logical - return in stm::textProcessor() format?}
+
+\item{verbose}{logical - report interim steps during processing}
 }
 \value{
 Feature counts, as a matrix (or in stm format)

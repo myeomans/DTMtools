@@ -1,6 +1,16 @@
 #' POS Tagger
 #' @description Tally parse-dependent features
 #' @param texts a character vector of texts.
+#' @param ngrams numeric vector of ngram sizes (max = 1:3)
+#' @param language character what language are you parsing?
+#' @param punct logical should exclamation points and question marks be included as features?
+#' @param stop.words logical should stop words be included? default is TRUE
+#' @param POS logical should features have part of speech tags appended? default is FALSE
+#' @param overlap numeric How dissimilar (in cossine distance) must an ngram be from all (n-1)grams to be added to feature set?
+#' @param sparse maximum feature sparsity for inclusion (1 = include all features)
+#' @param dependency logical should features have dependency relations appended? default is FALSE
+#' @param tag.sub numeric what fraction of features should be replaced by POS tags? default is 0 (no features), fractions not supported yet.
+#' @param verbose logical - report interim steps during processing
 #' @return a matrix of feature counts
 #' @import data.table
 posTokens <- function(texts,
@@ -14,18 +24,6 @@ posTokens <- function(texts,
                       tag.sub=0,
                       verbose=FALSE){
   if(!((tag.sub>=0)&(tag.sub<=1))) tag.sub<-0
-#
-#   data("phone_offers")
-#   texts=phone_offers$message
-#   ngrams=1
-#   language="english"
-#   punct=T
-#   stop.words=TRUE
-#   overlap=1
-#   sparse=0.99
-#   dependency=T
-#   tag.sub=1
-#   verbose=FALSE
 
   names(texts) <- 1:length(texts)
   texts[texts==""] <- " "

@@ -4,16 +4,16 @@
 #' @param sparse maximum feature sparsity for inclusion (1 = include all features)
 #' @param wstem character what words should be stemmed?
 #' @param ngrams numeric vector of ngram sizes (max = 1:3)
-#' @param language character
-#' @param vocabmatch matrix
+#' @param language character what language are you parsing?
+#' @param vocabmatch matrix used to create a new matrix with features that are identical to a previous one
 #' @param stop.words logical should stop words be included? default is TRUE
 #' @param punct logical should exclamation points and question marks be included as features?
-#' @param POS logical should
-#' @param dependency logical should
-#' @param tag.sub numeric what
-#' @param overlap numeric what
-#' @param group.conc character group IDs for
-#' @param group.conc.cutoff numeric
+#' @param POS logical should features have part of speech tags appended? default is FALSE
+#' @param dependency logical should features have dependency relations appended? default is FALSE
+#' @param tag.sub numeric what fraction of features should be replaced by POS tags? default is 0 (no features), fractions not supported yet.
+#' @param overlap numeric How dissimilar (in cossine distance) must an ngram be from all (n-1)grams to be added to feature set?
+#' @param group.conc character group IDs for removing group-specific words
+#' @param group.conc.cutoff numeric threshold for group-specificity of words, as proportion of occurences in the main group.
 #' @param TPformat logical - return in stm::textProcessor() format?
 #' @param verbose logical - report interim steps during processing
 #' @return Feature counts, as a matrix (or in stm format)

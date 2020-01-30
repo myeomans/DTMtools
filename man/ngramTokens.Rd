@@ -18,6 +18,22 @@ ngramTokens(
 }
 \arguments{
 \item{texts}{a character vector of texts.}
+
+\item{wstem}{character what words should be stemmed?}
+
+\item{ngrams}{numeric vector of ngram sizes (max = 1:3)}
+
+\item{language}{character what language are you parsing?}
+
+\item{punct}{logical should exclamation points and question marks be included as features?}
+
+\item{stop.words}{logical should stop words be included? default is TRUE}
+
+\item{overlap}{numeric How dissimilar (in cossine distance) must an ngram be from all (n-1)grams to be added to feature set?}
+
+\item{sparse}{maximum feature sparsity for inclusion (1 = include all features)}
+
+\item{verbose}{logical - report interim steps during processing}
 }
 \value{
 a matrix of feature counts
