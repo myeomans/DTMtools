@@ -13,7 +13,8 @@ ngramTokens(
   stop.words = TRUE,
   overlap = 1,
   sparse = 0.99,
-  verbose = FALSE
+  verbose = FALSE,
+  mc.cores = 1
 )
 }
 \arguments{

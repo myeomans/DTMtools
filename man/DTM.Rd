@@ -20,7 +20,8 @@ DTM(
   group.conc = NULL,
   group.conc.cutoff = 0.8,
   TPformat = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  mc.cores = 1
 )
 }
 \arguments{

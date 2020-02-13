@@ -128,14 +128,14 @@ stemexcept<-function(sentence, excepts, language="english"){
   return(paste(words, collapse=" "))
 }
 ############################################################################
-overlaps<-function(high, low, cutoff=.9){
+overlaps<-function(high, low, cutoff=.9, mc.cores=1){
   if(cutoff==1){
     combined<-cbind(as.matrix(high),as.matrix(low))
   } else {
     high<-as.matrix(high)
     low_l<-data.frame(lapply(colnames(low),function(x) as.vector(low[,x])))
     colnames(low_l)<-colnames(low)
-    #low_max <- unlist(parallel::mclapply(low_l,function(x) max(unlist(apply(high, 2, function(y) cor(x,y)))), mc.cores=parallel::detectCores()))
+    #low_max <- unlist(parallel::mclapply(low_l,function(x) max(unlist(apply(high, 2, function(y) cor(x,y)))), mc.cores=mc.cores))
     #combined<-cbind(high,low[,low_max<cutoff])
 
     #tmp <- cor(as.matrix(combined))

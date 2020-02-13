@@ -32,7 +32,8 @@ DTM<-function(texts,
               group.conc=NULL,
               group.conc.cutoff=0.8,
               TPformat=FALSE,
-              verbose=FALSE){
+              verbose=FALSE,
+              mc.cores=1){
 
   #######################################################
   if(!is.null(vocabmatch)){
@@ -69,7 +70,8 @@ DTM<-function(texts,
                      stop.words=stop.words,
                      overlap=overlap,
                      sparse=sparse,
-                     verbose=verbose)
+                     verbose=verbose,
+                     mc.cores=mc.cores)
   }
   #######################################################
   if(!is.null(group.conc)) dtm<-group.max.conc(dtm, group.conc, cutoff=group.conc.cutoff)
