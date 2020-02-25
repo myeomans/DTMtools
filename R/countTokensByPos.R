@@ -7,7 +7,7 @@
 #' @import data.table
 
 countTokensByPos <- function(texts, ... ){ #=> list
-  texts <- iconv(texts,to="ASCII",sub=" ")
+  texts<-iconv(textclean::replace_non_ascii(texts),to="ASCII",sub=" ")
   len_text <- length(texts)
 
   m_pos_token_one_hot <- posTokens(texts, ...)

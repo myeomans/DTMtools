@@ -1,7 +1,7 @@
 Package: DTMtools
 Type: Package
 Title: Adjustable Feature Counting for Text Analysis
-Version: 0.4.2
+Version: 0.4.3
 Author: Mike Yeomans, Alejandro Kantor
 Maintainer: Mike Yeomans <mk.yeomans@gmail.com>
 Description: Handles a variety of tokenization options. Also ports data into STM format.
@@ -18,5 +18,6 @@ Imports:
     plyr,
     dplyr,
     SnowballC,
-    data.table
+    data.table,
+    textclean
 RoxygenNote: 7.0.2

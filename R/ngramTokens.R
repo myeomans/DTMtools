@@ -21,7 +21,7 @@ ngramTokens<-function(texts,
                        sparse=0.99,
                        verbose=FALSE,
                       mc.cores=1){
-
+  texts<-iconv(textclean::replace_non_ascii(texts),to="ASCII",sub=" ")
   cleanertext<-unlist(parallel::mclapply(texts, cleantext, language, stop.words, punct,
                                          mc.cores = mc.cores))
 

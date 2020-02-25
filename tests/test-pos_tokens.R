@@ -4,17 +4,17 @@ library(quanteda)
 
 data("phone_offers")
 
-texts=phone_offers$message[1:100]
-texts = c("",texts)
-texts[20] = ""
-wstem="all"
-language="english"
-punct=FALSE
-stop.words=TRUE
-overlap=1
-verbose=FALSE
-sparse=0.99
-dependency=TRUE
+# texts=phone_offers$message[1:100]
+# texts = c("",texts)
+# texts[20] = ""
+# wstem="all"
+# language="english"
+# punct=FALSE
+# stop.words=TRUE
+# overlap=1
+# verbose=FALSE
+# sparse=0.99
+# dependency=TRUE
 
 debug(posTokens)
 undebug(posTokens)
